@@ -21,3 +21,8 @@ handlers.GetUIDs=function(args, context){
     var inventoryUID=internalData.Data["InventoryUID"].Value;
     return {ProgressUID:progressUID, InventoryUID:inventoryUID};
 }
+
+//Cloud script that generates Maze Configuration
+handlers.GetMazeConfig=function(args){
+
+}
