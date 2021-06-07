@@ -21,33 +21,44 @@ handlers.GetMazeConfig = function (args) {
     else {
         rarity = "UltraRare";
     }
+    /*
     //Choosing Animal From Rarity
     var titleDataResult = server.GetTitleData({});
+
     var data = titleDataResult.Data["Animal"];
     var animals = JSON.parse(data);
-    var animalsOfRarity;
-    var animalVariance;
-    var varianceSum = 0;
+
+    let animalsOfRarity: Array<string>;
+    let animalVariance: Array<Number>;
+    let varianceSum: number = 0;
+
     for (var key in Object.keys(animals)) {
         if (key['animalRarity'] == rarity) {
             animalsOfRarity.push(key);
             varianceSum += Number(key['varianceInRarityGroup']);
-            animalVariance.push(varianceSum);
+            animalVariance.push(varianceSum)
         }
     }
+
     randomNumber = Math.random() * varianceSum;
     var selectedAnimalId;
-    var selectedAnimalVariance;
-    for (var i = 0; i < animalsOfRarity.length; i++) {
+    let selectedAnimalVariance : number;
+    for (let i = 0; i < animalsOfRarity.length; i++) {
         if (randomNumber <= animalVariance[i]) {
             selectedAnimalId = animalsOfRarity[i];
             selectedAnimalVariance = Number(data[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
         }
     }
+    
     var selectedAnimal = data[selectedAnimalId];
+
     var result = {
-        "AnimalId": selectedAnimalId,
-        "AnimalVariance": selectedAnimalVariance
+        "AnimalId":selectedAnimalId,
+        "AnimalVariance":selectedAnimalVariance
+    }
+    */
+    var result = {
+        "AnimalRarity": rarity
     };
     return result;
 };

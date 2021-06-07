@@ -26,6 +26,7 @@ handlers.GetMazeConfig = function (args) {
         rarity = "UltraRare";
     }
 
+    /*
     //Choosing Animal From Rarity
     var titleDataResult = server.GetTitleData({});
 
@@ -60,7 +61,10 @@ handlers.GetMazeConfig = function (args) {
         "AnimalId":selectedAnimalId,
         "AnimalVariance":selectedAnimalVariance
     }
-
+    */
+    var result = {
+        "AnimalRarity": rarity
+    };
     return result;
 }
 
