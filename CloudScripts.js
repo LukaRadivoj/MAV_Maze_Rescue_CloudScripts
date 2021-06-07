@@ -3,7 +3,6 @@
 handlers.GetMazeConfig = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
     var playerLevel = levelResult.Statistics[0].Value;
-    /*
     //Choosing Rarity
     var rarity;
     var randomNumber = getRandomInt((playerLevel * 2) + 1);
@@ -22,49 +21,33 @@ handlers.GetMazeConfig = function (args) {
     else {
         rarity = "UltraRare";
     }
-
-    */
     //Choosing Animal From Rarity
     var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
     var animals = titleDataResult.Data.Animals;
     var animalsObj = JSON.parse(animals);
-    var firstObj = Object.keys(animalsObj)[0];
-    return animalsObj[firstObj];
-    /*
-    let animalsOfRarity: Array<string>;
-    let animalVariance: Array<Number>;
-    let varianceSum: number = 0;
-
-    for (var key in Object.keys(animals)) {
-        if (key['animalRarity'] == rarity) {
+    var animalsOfRarity;
+    var animalVariance;
+    var varianceSum = 0;
+    for (var key in Object.keys(animalsObj)) {
+        if (animalsObj[key]['animalRarity'] == rarity) {
             animalsOfRarity.push(key);
-            varianceSum += Number(key['varianceInRarityGroup']);
-            animalVariance.push(varianceSum)
+            varianceSum += Number(animalsObj[key]['varianceInRarityGroup']);
+            animalVariance.push(varianceSum);
         }
     }
-
     randomNumber = Math.random() * varianceSum;
     var selectedAnimalId;
-    let selectedAnimalVariance : number;
-    for (let i = 0; i < animalsOfRarity.length; i++) {
+    var selectedAnimalVariance;
+    for (var i = 0; i < animalsOfRarity.length; i++) {
         if (randomNumber <= animalVariance[i]) {
             selectedAnimalId = animalsOfRarity[i];
-            selectedAnimalVariance = Number(data[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
+            selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
         }
     }
-    
-    var selectedAnimal = data[selectedAnimalId];
-
-    var result = {
-        "AnimalId":selectedAnimalId,
-        "AnimalVariance":selectedAnimalVariance
-    }
-    
-    var result = {
-        "PlayerLevel": playerLevel
+    return {
+        "AnimalId": selectedAnimalId,
+        "AnimalVariance": selectedAnimalVariance
     };
-    return result;
-    */
 };
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
