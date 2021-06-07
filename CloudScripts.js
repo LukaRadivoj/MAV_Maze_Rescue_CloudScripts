@@ -1,9 +1,11 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
+    /*
     var playerDataResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
     var playerLevel = JSON.parse(playerDataResult.Statistics["Level"]);
-    /*
+
+    
     //Choosing Rarity
     var rarity;
     var randomNumber = getRandomInt((playerLevel * 2) + 1);
@@ -58,12 +60,16 @@ handlers.GetMazeConfig = function (args) {
         "AnimalId":selectedAnimalId,
         "AnimalVariance":selectedAnimalVariance
     }
-    */
+    
     var result = {
         "PlayerLevel": playerLevel
     };
     return result;
+    */
+    return { "Result": 0 };
 };
+/*
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
+*/ 
