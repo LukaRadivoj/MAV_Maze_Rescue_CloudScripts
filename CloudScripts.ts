@@ -3,7 +3,9 @@
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
 
-    return { Level : "level" };
+    var levelResult = server.GetPlayerStatistics({ PlayFabId : currentPlayerId });
+
+    return levelResult;
 
 
     /*

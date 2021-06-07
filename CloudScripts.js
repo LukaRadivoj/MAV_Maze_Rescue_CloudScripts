@@ -1,7 +1,8 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
-    return { Level: "level" };
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    return levelResult;
     /*
     //Choosing Rarity
     var rarity;
