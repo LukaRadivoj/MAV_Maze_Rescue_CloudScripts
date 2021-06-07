@@ -34,8 +34,8 @@ handlers.GetMazeConfig = function (args) {
     var animals = titleDataResult.Data.Animals;
     var animalsObj = JSON.parse(animals);
 
-    let animalsOfRarity: Array<string>;
-    let animalVariance: Array<number>;
+    let animalsOfRarity: Array<string> = new Array();
+    let animalVariance: Array<number> = new Array();
     let varianceSum: number = 0;
 
 

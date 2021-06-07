@@ -25,8 +25,8 @@ handlers.GetMazeConfig = function (args) {
     var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
     var animals = titleDataResult.Data.Animals;
     var animalsObj = JSON.parse(animals);
-    var animalsOfRarity;
-    var animalVariance;
+    var animalsOfRarity = new Array();
+    var animalVariance = new Array();
     var varianceSum = 0;
     for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
         var key = _a[_i];
