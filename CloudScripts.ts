@@ -43,7 +43,7 @@ handlers.GetMazeConfig = function (args) {
         var currentAnimal = animalsObj[key];
 
         if (currentAnimal['animalRarity'] == rarity) {
-            return { "Variance": currentAnimal };
+            return { "Variance": currentAnimal['varianceInRarityGroup'] };
             animalsOfRarity.push(key);
             var variance = (currentAnimal['varianceInRarityGroup']);
             let varianceNum : number = +(variance);
