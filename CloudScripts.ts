@@ -4,8 +4,8 @@
 handlers.GetMazeConfig = function (args) {
 
     
-    var playerDataResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
-    var playerLevel = JSON.parse(playerDataResult.Statistics["Level"]);
+    var playerDataResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId }).Statistics;
+    var playerLevel = JSON.parse(playerDataResult["Level"]);
 
     /*
     //Choosing Rarity
