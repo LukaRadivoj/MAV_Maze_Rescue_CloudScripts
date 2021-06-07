@@ -3,9 +3,9 @@
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
 
-    var levelResult = server.GetPlayerStatistics({ PlayFabId : currentPlayerId });
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
 
-    let playerLevel : number =  levelResult.Statistics[0].Value;
+    let playerLevel: number = levelResult.Statistics[0].Value;
 
 
     /*
@@ -34,7 +34,7 @@ handlers.GetMazeConfig = function (args) {
 
     var data = titleDataResult.Data["Animals"];
 
-    return data[0];
+    return { "Result": data.length };
 
 
 
