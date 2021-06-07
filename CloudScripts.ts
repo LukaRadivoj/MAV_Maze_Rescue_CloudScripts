@@ -5,7 +5,7 @@ handlers.GetMazeConfig = function (args) {
 
     var levelResult = server.GetPlayerStatistics({ PlayFabId : currentPlayerId });
 
-    return levelResult['Statistics'];
+    return levelResult.Statistics[0];
 
 
     /*
