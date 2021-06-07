@@ -34,7 +34,7 @@ handlers.GetMazeConfig = function (args) {
     var animal = titleDataResult.Data.Animals;
 
 
-    return {"Result" : animal};
+    return {"Result" : animal[0]};
 
 
 
