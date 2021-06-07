@@ -35,7 +35,7 @@ handlers.GetMazeConfig = function (args) {
     var animalsObj = JSON.parse(animals);
 
     let animalsOfRarity: Array<string>;
-    let animalVariance: Array<Number>;
+    let animalVariance: Array<number>;
     let varianceSum: number = 0;
 
 
@@ -48,8 +48,8 @@ handlers.GetMazeConfig = function (args) {
             varianceSum += varianceNum;
 
             animalVariance.push(varianceSum)
-            animalsOfRarity.push(key);
             return { "sum": varianceSum }
+            animalsOfRarity.push(key);        
         }
     }
 
