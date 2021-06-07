@@ -38,6 +38,8 @@ handlers.GetMazeConfig = function (args) {
     let animalVariance: Array<Number>;
     let varianceSum: number = 0;
 
+    return { "VarianceSum": varianceSum };
+
     for (var key of Object.keys(animalsObj)) {
         var currentAnimal = animalsObj[key];
 

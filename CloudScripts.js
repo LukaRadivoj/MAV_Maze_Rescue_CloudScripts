@@ -28,6 +28,7 @@ handlers.GetMazeConfig = function (args) {
     var animalsOfRarity;
     var animalVariance;
     var varianceSum = 0;
+    return { "VarianceSum": varianceSum };
     for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
         var key = _a[_i];
         var currentAnimal = animalsObj[key];
