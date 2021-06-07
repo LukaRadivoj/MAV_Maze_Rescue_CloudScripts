@@ -15,6 +15,8 @@ handlers.GetMazeConfig = function (args) {
 
     var playerStatObject = JSON.parse(playerStatResult.Statistics["Level"]);
 
+    return playerStatResult.Statistics;
+
 
     /*
     //Choosing Rarity
@@ -77,8 +79,6 @@ handlers.GetMazeConfig = function (args) {
     };
     return result;
     */
-
-    return { "Result": playerStatObject };
 }
 
 

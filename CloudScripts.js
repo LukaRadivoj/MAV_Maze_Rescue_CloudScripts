@@ -10,6 +10,7 @@ handlers.GetMazeConfig = function (args) {
     // the PlayFab API, so you don't have to write extra code to issue HTTP requests. 
     var playerStatResult = server.GetPlayerStatistics(request);
     var playerStatObject = JSON.parse(playerStatResult.Statistics["Level"]);
+    return playerStatResult.Statistics;
     /*
     //Choosing Rarity
     var rarity;
@@ -71,7 +72,6 @@ handlers.GetMazeConfig = function (args) {
     };
     return result;
     */
-    return { "Result": playerStatObject };
 };
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
