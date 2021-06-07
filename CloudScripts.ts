@@ -3,9 +3,9 @@
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
 
-    
+
     var request = {
-        PlayFabId: currentPlayerId  
+        PlayFabId: currentPlayerId
     };
     // The pre-defined "server" object has functions corresponding to each PlayFab server API 
     // (https://api.playfab.com/Documentation/Server). It is automatically 
@@ -15,7 +15,7 @@ handlers.GetMazeConfig = function (args) {
 
     var playerStatObject = JSON.parse(playerStatResult.Statistics["Level"]);
 
-    return playerStatResult.Statistics;
+    return { Level : "level" };
 
 
     /*
