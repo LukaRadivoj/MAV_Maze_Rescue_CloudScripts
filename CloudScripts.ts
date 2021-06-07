@@ -35,7 +35,7 @@ handlers.GetMazeConfig = function (args) {
     var animalObj = JSON.parse(animal);
 
 
-    return {"Result" : Object.keys(animalObj).length};
+    return {"Result" : Object.keys(animalObj)[0]};
 
 
 
