@@ -4,8 +4,17 @@
 handlers.GetMazeConfig = function (args) {
 
     
-    var playerDataResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId }).Statistics;
-    var playerLevel = JSON.parse(playerDataResult["Level"]);
+    var request = {
+        PlayFabId: currentPlayerId  
+    };
+    // The pre-defined "server" object has functions corresponding to each PlayFab server API 
+    // (https://api.playfab.com/Documentation/Server). It is automatically 
+    // authenticated as your title and handles all communication with 
+    // the PlayFab API, so you don't have to write extra code to issue HTTP requests. 
+    var playerStatResult = server.GetPlayerStatistics(request);
+
+    var playerStatObject = JSON.parse(playerStatResult.Statistics["Level"]);
+
 
     /*
     //Choosing Rarity
@@ -69,7 +78,7 @@ handlers.GetMazeConfig = function (args) {
     return result;
     */
 
-    return { "Result": playerLevel };
+    return { "Result": playerStatObject };
 }
 
 
