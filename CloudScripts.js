@@ -2,7 +2,7 @@
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
-    return levelResult.Statistics;
+    return levelResult['Statistics'];
     /*
     //Choosing Rarity
     var rarity;
