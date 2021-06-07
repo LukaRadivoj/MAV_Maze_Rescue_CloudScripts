@@ -8,7 +8,7 @@ handlers.GetMazeConfig = function (args) {
     let playerLevel: number = levelResult.Statistics[0].Value;
 
 
-    
+
     //Choosing Rarity
     var rarity;
     var randomNumber = getRandomInt((playerLevel * 2) + 1);
@@ -28,19 +28,19 @@ handlers.GetMazeConfig = function (args) {
         rarity = "UltraRare";
     }
 
-    
+
     //Choosing Animal From Rarity
-    var titleDataResult = server.GetTitleData({ "Keys" : ["Animals"]});
+    var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
     var animals = titleDataResult.Data.Animals;
     var animalsObj = JSON.parse(animals);
-        
+
     let animalsOfRarity: Array<string>;
     let animalVariance: Array<Number>;
     let varianceSum: number = 0;
 
     for (var key of Object.keys(animalsObj)) {
-        var currentAnimal = animalsObj[key]; 
-        return currentAnimal;       
+        var currentAnimal = animalsObj[key];
+        return { "Result": currentAnimal['animalRarity'] };
         if (animalsObj[key]['animalRarity'] == rarity) {
             animalsOfRarity.push(key);
             varianceSum += Number(animalsObj[key]['varianceInRarityGroup']);
@@ -50,17 +50,17 @@ handlers.GetMazeConfig = function (args) {
 
     randomNumber = Math.random() * varianceSum;
     var selectedAnimalId;
-    let selectedAnimalVariance : number;
+    let selectedAnimalVariance: number;
     for (let i = 0; i < animalsOfRarity.length; i++) {
         if (randomNumber <= animalVariance[i]) {
             selectedAnimalId = animalsOfRarity[i];
             selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
         }
     }
-    
+
     return {
-        "AnimalId" : selectedAnimalId,
-        "AnimalVariance" : selectedAnimalVariance
+        "AnimalId": selectedAnimalId,
+        "AnimalVariance": selectedAnimalVariance
     }
 }
 
