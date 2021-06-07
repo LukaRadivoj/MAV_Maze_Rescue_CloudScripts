@@ -5,7 +5,7 @@ handlers.GetMazeConfig = function (args) {
 
     var levelResult = server.GetPlayerStatistics({ PlayFabId : currentPlayerId });
 
-    return levelResult.Statistics[0];
+    let playerLevel : number =  levelResult.Statistics[0].Value;
 
 
     /*
@@ -28,13 +28,15 @@ handlers.GetMazeConfig = function (args) {
         rarity = "UltraRare";
     }
 
-    
+    */
     //Choosing Animal From Rarity
     var titleDataResult = server.GetTitleData({});
 
-    var data = titleDataResult.Data["Animal"];
-    var animals = JSON.parse(data);
+    return titleDataResult;
 
+
+
+    /*
     let animalsOfRarity: Array<string>;
     let animalVariance: Array<Number>;
     let varianceSum: number = 0;
