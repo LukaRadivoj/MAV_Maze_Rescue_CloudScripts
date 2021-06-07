@@ -42,13 +42,14 @@ handlers.GetMazeConfig = function (args) {
     for (var key of Object.keys(animalsObj)) {
         var currentAnimal = animalsObj[key];
 
-        if (currentAnimal['animalRarity'] == rarity) {          
+        if (currentAnimal['animalRarity'] == rarity) {
             var variance = (currentAnimal['varianceInRarityGroup']);
-            let varianceNum : number = +(variance);
+            let varianceNum: number = +(variance);
             varianceSum += varianceNum;
-            return { "VarianceSum": varianceSum };
+
             animalVariance.push(varianceSum)
             animalsOfRarity.push(key);
+            return { "sum": varianceSum }
         }
     }
 

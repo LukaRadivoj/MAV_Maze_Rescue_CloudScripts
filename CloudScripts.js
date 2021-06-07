@@ -35,9 +35,9 @@ handlers.GetMazeConfig = function (args) {
             var variance = (currentAnimal['varianceInRarityGroup']);
             var varianceNum = +(variance);
             varianceSum += varianceNum;
-            return { "VarianceSum": varianceSum };
             animalVariance.push(varianceSum);
             animalsOfRarity.push(key);
+            return { "sum": varianceSum };
         }
     }
     randomNumber = Math.random() * varianceSum;
