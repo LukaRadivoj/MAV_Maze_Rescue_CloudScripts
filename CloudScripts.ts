@@ -109,7 +109,7 @@ handlers.GetUnlockedOrbs = function (args) {
     var playerCurrency = playerInventory.VirtualCurrency["AP"];
 
     var result = {
-        "StoreItems" : store,
+        "StoreItems" : store.Store,
         "PlayerCurrency" : playerCurrency
     }
 

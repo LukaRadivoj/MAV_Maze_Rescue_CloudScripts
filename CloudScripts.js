@@ -89,7 +89,7 @@ handlers.GetUnlockedOrbs = function (args) {
     var playerInventory = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerCurrency = playerInventory.VirtualCurrency["AP"];
     var result = {
-        "StoreItems": store,
+        "StoreItems": store.Store,
         "PlayerCurrency": playerCurrency
     };
     return result;
