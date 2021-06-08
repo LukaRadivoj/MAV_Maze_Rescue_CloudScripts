@@ -48,7 +48,7 @@ handlers.GetMazeConfig = function (args) {
             varianceSum += varianceNum;
 
             animalVariance.push(varianceSum)
-            animalsOfRarity.push(key);        
+            animalsOfRarity.push(key);
         }
     }
 
@@ -56,10 +56,12 @@ handlers.GetMazeConfig = function (args) {
     var selectedAnimalId;
     let selectedAnimalVariance: number;
     for (let i = 0; i < animalsOfRarity.length; i++) {
-        if (randomNumber <= animalVariance[i]) {
-            selectedAnimalId = animalsOfRarity[i];
-            selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
+        if (randomNumber > animalVariance[i]) {
+            continue;
         }
+        selectedAnimalId = animalsOfRarity[i];
+        selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
+        break;
     }
 
     return {

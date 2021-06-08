@@ -43,10 +43,12 @@ handlers.GetMazeConfig = function (args) {
     var selectedAnimalId;
     var selectedAnimalVariance;
     for (var i = 0; i < animalsOfRarity.length; i++) {
-        if (randomNumber <= animalVariance[i]) {
-            selectedAnimalId = animalsOfRarity[i];
-            selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
+        if (randomNumber > animalVariance[i]) {
+            continue;
         }
+        selectedAnimalId = animalsOfRarity[i];
+        selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
+        break;
     }
     return {
         "AnimalId": selectedAnimalId,
