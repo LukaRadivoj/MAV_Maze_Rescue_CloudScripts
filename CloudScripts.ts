@@ -115,3 +115,7 @@ handlers.GetUnlockedOrbs = function (args) {
 
     return result;
 }
+
+handlers.NewUserInitialisation = function (args) {
+
+}
