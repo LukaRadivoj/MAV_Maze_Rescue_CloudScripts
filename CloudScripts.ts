@@ -1,5 +1,7 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 
+import { Guid } from "guid-typescript";
+
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
 
@@ -67,7 +69,6 @@ handlers.GetMazeConfig = function (args) {
     }
 }
 
-
 //Cloud script that returns all unlockedOrbs
 handlers.GetUnlockedOrbs = function (args) {
 
@@ -109,13 +110,96 @@ handlers.GetUnlockedOrbs = function (args) {
     var playerCurrency = playerInventory.VirtualCurrency["AP"];
 
     var result = {
-        "StoreItems" : store.Store,
-        "PlayerCurrency" : playerCurrency
+        "StoreItems": store.Store,
+        "PlayerCurrency": playerCurrency
     }
 
     return result;
 }
 
+//Cloud script that initalises new players
 handlers.NewUserInitialisation = function (args) {
+    server.UpdatePlayerStatistics(
+        {
+            PlayFabId: currentPlayerId,
+            Statistics: [
+                { StatisticName: "Level", Value: 1 },
+                { StatisticName: "Experience", Value: 0 }
+            ]
+        });
 
+    var guid = Guid.create()
+
+    server.UpdateUserData({
+        PlayFabId: currentPlayerId,
+        Data: { "CurrentRescueOperation": "{\"Guid\":\"" + guid.toString + "\",\"AnimalId\":\"D_B1_C1\",\"Difficulty\":\"0.1\"}" }
+    })
+
+    server.UpdateUserData({
+        PlayFabId: currentPlayerId,
+        Data: { "CollectedAnimals": "[]" }
+    })
+}
+
+//Cloud script that syncs local and cloud player data
+handlers.PlayFabSync = function (args) {
+
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Expirience"] });
+    let playerLevel: number = levelResult.Statistics[0].Value;
+    let playerExperience: number = levelResult.Statistics[1].Value;
+
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    let playerAP: number = playerInventoryResult.VirtualCurrency["AP"];
+
+    let levelBracket: number = 0;
+
+    if (playerLevel >= 40) {
+        levelBracket = 40;
+    }
+    else if (playerLevel >= 30) {
+        levelBracket = 30;
+    }
+    else if (playerLevel >= 23) {
+        levelBracket = 23;
+    }
+    else if (playerLevel >= 15) {
+        levelBracket = 15;
+    }
+    else if (playerLevel >= 9) {
+        levelBracket = 9;
+    }
+    else if (playerLevel >= 5) {
+        levelBracket = 5;
+    }
+    else if (playerLevel >= 2) {
+        levelBracket = 2;
+    }
+    else {
+        levelBracket = 1;
+    }
+
+    var storeId = "S_" + levelBracket;
+    var store = server.GetStoreItems({ StoreId: storeId });
+
+    let abilityOrbs = [];
+    for (var item in store.Store) {
+        var itemObject = JSON.parse(item);
+        var orb = {
+            "AbilityId": itemObject["ItemId"],
+            "AbilityCost": itemObject["VirtualCurrencyPrices"]["AP"]
+        }
+        abilityOrbs.push(orb);
+    }
+
+
+    var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})
+    let animals = [];
+
+    for (var animal in animalData.Data){
+        var animalObj = JSON.parse(animal);
+        var tmpAnimal = {
+            "Guid" : Guid.create(),
+            "AnimalId" : animalObj.key
+        }
+    }
 }
