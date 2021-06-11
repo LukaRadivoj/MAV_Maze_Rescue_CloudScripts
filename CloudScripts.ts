@@ -191,7 +191,7 @@ handlers.PlayFabSync = function (args) {
     }
 
     
-    var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})    
+    var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["CollectedAnimals"]})    
     var animals = animalData.Data;
     
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
@@ -203,7 +203,7 @@ handlers.PlayFabSync = function (args) {
         "EXP_TO_LVL": exp2lvl,
         "AP": playerAP,
         "AO_IDs": abilityOrbs,
-        "Animals":animals,
+        "Animal_IDs":animals,
         "RO": rescueOperationObject
     }
 
