@@ -151,7 +151,7 @@ handlers.PlayFabSync = function (args) {
     for (var item in store.Store) {
         var itemObject = JSON.parse(item);
         var orb = {
-            "AbilityId": itemObject["ItemId"],
+            "AbilityId": "ItemID",
             "AbilityCost": itemObject
         };
         abilityOrbs.push(orb);
