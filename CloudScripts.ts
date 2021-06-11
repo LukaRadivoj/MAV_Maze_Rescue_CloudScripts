@@ -190,7 +190,8 @@ handlers.PlayFabSync = function (args) {
         }
         abilityOrbs.push(orb);
     }
-
+    
+    //Requires GUID
     /*
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})
     let animals = [];
