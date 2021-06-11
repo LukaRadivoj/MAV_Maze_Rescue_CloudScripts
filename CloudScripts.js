@@ -147,7 +147,7 @@ handlers.UseAbility = function (args) {
         if (store.Store[i].ItemId == abilityId) {
             var price = store.Store[i].VirtualCurrencyPrices["AP"];
             server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AR" });
-            var id = store.Store[i].CustomData["Ability_ID"];
+            var id = store.Store[i].CustomData;
             return id;
             var number = store.Store[i].CustomData["Characteristic_Number"];
             var result = {
