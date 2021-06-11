@@ -1,6 +1,6 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 
-import { Guid } from "guid-typescript";
+import { v4 as uuidv4 } from 'uuid';
 
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
@@ -128,7 +128,7 @@ handlers.NewUserInitialisation = function (args) {
             ]
         });
 
-    var guid = Guid.create()
+    var guid = uuidv4();
 
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
@@ -198,8 +198,10 @@ handlers.PlayFabSync = function (args) {
     for (var animal in animalData.Data){
         var animalObj = JSON.parse(animal);
         var tmpAnimal = {
-            "Guid" : Guid.create(),
+            "Guid" : uuidv4(),
             "AnimalId" : animalObj.key
         }
     }
+
+    var rescueOperationData = server.GetUserData({PlayFabId: currentPlayerId, Keys : ["CurrentRescueOperation"]})   
 }

@@ -1,5 +1,5 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
-define("CloudScripts", ["require", "exports", "guid-typescript"], function (require, exports, guid_typescript_1) {
+define("CloudScripts", ["require", "exports", "uuid"], function (require, exports, uuid_1) {
     "use strict";
     exports.__esModule = true;
     //Cloud script that generates Maze Configuration
@@ -106,7 +106,7 @@ define("CloudScripts", ["require", "exports", "guid-typescript"], function (requ
                 { StatisticName: "Experience", Value: 0 }
             ]
         });
-        var guid = guid_typescript_1.Guid.create();
+        var guid = uuid_1.v4();
         server.UpdateUserData({
             PlayFabId: currentPlayerId,
             Data: { "CurrentRescueOperation": "{\"Guid\":\"" + guid.toString + "\",\"AnimalId\":\"D_B1_C1\",\"Difficulty\":\"0.1\"}" }
@@ -164,9 +164,10 @@ define("CloudScripts", ["require", "exports", "guid-typescript"], function (requ
         for (var animal in animalData.Data) {
             var animalObj = JSON.parse(animal);
             var tmpAnimal = {
-                "Guid": guid_typescript_1.Guid.create(),
+                "Guid": uuid_1.v4(),
                 "AnimalId": animalObj.key
             };
         }
+        var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     };
 });
