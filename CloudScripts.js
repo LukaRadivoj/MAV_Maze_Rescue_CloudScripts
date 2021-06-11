@@ -146,7 +146,7 @@ handlers.PlayFabSync = function (args) {
         levelBracket = 1;
     }
     var storeId = "S_" + levelBracket;
-    var store = server.GetStoreItems({ StoreId: storeId });
+    var store = server.GetStoreItems({ StoreId: "S_1" });
     var abilityOrbs = [];
     for (var item in store.Store) {
         var itemObject = JSON.parse(item);
@@ -154,7 +154,7 @@ handlers.PlayFabSync = function (args) {
             "AbilityId": "ItemID",
             "AbilityCost": itemObject
         };
-        abilityOrbs.push(orb);
+        abilityOrbs.push(item);
     }
     //Requires GUID
     /*
