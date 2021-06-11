@@ -115,7 +115,7 @@ handlers.NewUserInitialisation = function (args) {
 };
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
-    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Expirience"] });
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
     var playerLevel = levelResult.Statistics[0].Value;
     var playerExperience = levelResult.Statistics[1].Value;
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
