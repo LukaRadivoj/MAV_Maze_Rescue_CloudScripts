@@ -150,25 +150,12 @@ handlers.PlayFabSync = function (args) {
     }
     var storeId = "S_" + levelBracket;
     var store = server.GetStoreItems({ StoreId: storeId });
-    var catalog = server.GetCatalogItems({});
     var abilityOrbs = [];
     for (var i = 0; i < store.Store.length; i++) {
         abilityOrbs.push(store.Store[i].ItemId);
     }
-    //Requires GUID
-    /*
-    var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})
-    let animals = [];
-
-    for (var animal in animalData.Data){
-        var animalObj = JSON.parse(animal);
-        var tmpAnimal = {
-            "Guid" : uuidv4(),
-            "AnimalId" : animalObj.key
-        }
-        animals.push(tmpAnimal);
-    }
-    */
+    var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Animals"] });
+    var animals = animalData.Data["Animals"].Value;
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
     var result = {
