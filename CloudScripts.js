@@ -105,12 +105,21 @@ handlers.NewUserInitialisation = function (args) {
         ]
     });
     //var guid = uuidv4();
-    server.UpdateUserData({
-        PlayFabId: currentPlayerId
+    var updateString = JSON.stringify({
+        "UID": "1234",
+        "Animal_ID": "D_B1_C1",
+        "Diff": 0.5
     });
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: { "CollectedAnimals": "[]" }
+        Data: { "CurrentRescueOperation": updateString }
+    });
+    var updateString = JSON.stringify({
+        "Animals": []
+    });
+    server.UpdateUserData({
+        PlayFabId: currentPlayerId,
+        Data: { "CollectedAnimal": updateString }
     });
 };
 //Cloud script that syncs local and cloud player data

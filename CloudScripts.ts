@@ -130,14 +130,28 @@ handlers.NewUserInitialisation = function (args) {
 
     //var guid = uuidv4();
 
-    server.UpdateUserData({
-        PlayFabId: currentPlayerId,
-        //Data: { "CurrentRescueOperation": "{\"Guid\":\"" + guid.toString + "\",\"AnimalId\":\"D_B1_C1\",\"Difficulty\":\"0.1\"}" }
-    })
+    var updateString = JSON.stringify(
+        {
+            "UID": "1234",
+            "Animal_ID": "D_B1_C1",
+            "Diff": 0.5,
+        }
+    )
 
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: { "CollectedAnimals": "[]" }
+        Data: { "CurrentRescueOperation": updateString }
+    })
+
+    var updateString = JSON.stringify(
+        {
+            "Animals": []
+        }
+    )
+
+    server.UpdateUserData({
+        PlayFabId: currentPlayerId,
+        Data: { "CollectedAnimal": updateString }
     })
 }
 
