@@ -179,18 +179,14 @@ handlers.PlayFabSync = function (args) {
     }
 
     var storeId = "S_" + levelBracket;
-    var store = server.GetStoreItems({ StoreId: "S_1" });
-
+    var store = server.GetStoreItems({ StoreId: storeId });
+    var catalog = server.GetCatalogItems({});
+      
     let abilityOrbs = [];
     for (var item in store.Store) {
-        var itemObject = JSON.parse(item);
-        var orb = {
-            "AbilityId": "ItemID",
-            "AbilityCost": itemObject
-        }
         abilityOrbs.push(item);
     }
-    
+
     //Requires GUID
     /*
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})
@@ -205,15 +201,16 @@ handlers.PlayFabSync = function (args) {
         animals.push(tmpAnimal);
     }
     */
-    var rescueOperationData = server.GetUserData({PlayFabId: currentPlayerId, Keys : ["CurrentRescueOperation"]})   
+    var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
+    var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
     var result = {
-        "Level":playerLevel,
-        "Experience":playerExperience,
-        "AP":playerAP,
-        "AbilityOrbs":abilityOrbs,
+        "LVL": playerLevel,
+        "EXP": playerExperience,
+        "AP": playerAP,
+        "AbilityOrbs": abilityOrbs,
         //"Animals":animals,
-        "RescueOperation":rescueOperationData.Data
+        "RO": rescueOperationObject
     }
 
     return result;
