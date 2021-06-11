@@ -1,6 +1,6 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 
-import { v4 as uuidv4 } from 'uuid';
+//import { v4 as uuidv4 } from 'uuid';
 
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
@@ -128,11 +128,11 @@ handlers.NewUserInitialisation = function (args) {
             ]
         });
 
-    var guid = uuidv4();
+    //var guid = uuidv4();
 
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: { "CurrentRescueOperation": "{\"Guid\":\"" + guid.toString + "\",\"AnimalId\":\"D_B1_C1\",\"Difficulty\":\"0.1\"}" }
+        //Data: { "CurrentRescueOperation": "{\"Guid\":\"" + guid.toString + "\",\"AnimalId\":\"D_B1_C1\",\"Difficulty\":\"0.1\"}" }
     })
 
     server.UpdateUserData({
