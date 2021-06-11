@@ -135,6 +135,69 @@ handlers.PlayFabSync = function (args) {
     return result;
 };
 handlers.ResolveRescueOperation = function (args) {
+    var animalId = args.AnimalId;
+    var diff = args.Difficulty;
+    var success = args.success;
+    var alreadyOwned = false;
+    var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
+    var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
+    if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
+        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
+        var animals = animalData.Data["CollectedAnimals"].Value;
+        var animalsObject = JSON.parse(animals);
+        for (var key in Object.keys(animalsObject)) {
+            if (key = animalId) {
+                alreadyOwned = true;
+            }
+        }
+        var newAnimal;
+        if (!alreadyOwned) {
+            var animalUID = Guid.newGuid();
+            newAnimal = {
+                "UID": animalUID,
+                "ID": animalId
+            };
+        }
+        var expGain = diff * 1000;
+        if (alreadyOwned) {
+            expGain += diff * 100;
+            var currencyGain = Math.floor(20 * diff);
+            server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: currencyGain, VirtualCurrency: "AP" });
+        }
+        var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
+        var playerLevel = levelResult.Statistics[0].Value;
+        var playerExperience = levelResult.Statistics[1].Value;
+        var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
+        var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
+        var exp2lvl = expLvlobject[playerLevel];
+        if (playerExperience + expGain > exp2lvl) {
+            playerLevel++;
+            exp2lvl = expLvlobject[playerLevel];
+        }
+        playerExperience += expGain;
+        var newRescueOperation = GetNewRescueOperation();
+        var newRescueString = JSON.stringify(newRescueOperation);
+        server.UpdateUserData({
+            PlayFabId: currentPlayerId,
+            Data: { "CurrentRescueOperation": newRescueString }
+        });
+        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
+        var animals = animalData.Data["CollectedAnimals"].Value;
+        animals.concat(JSON.stringify(newAnimal));
+        server.UpdateUserData({
+            PlayFabId: currentPlayerId,
+            Data: { "CollectedAnimals": animals }
+        });
+        var result = {
+            "New_Animal": newAnimal,
+            "New_AOs": [],
+            "Exp": playerExperience,
+            "Lvl": playerLevel,
+            "Exp_To_Lvl": exp2lvl,
+            "RO": newRescueOperation
+        };
+        return result;
+    }
 };
 handlers.UseAbility = function (args) {
     var abilityId = args.AbilityId;
@@ -183,6 +246,69 @@ function GetLevelBracket(level) {
         levelBracket = 1;
     }
     return levelBracket;
+}
+function GetNewRescueOperation() {
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    var playerLevel = levelResult.Statistics[0].Value;
+    //Choosing Rarity
+    var rarity;
+    var rarityMulty;
+    var randomNumber = Math.floor(Math.random() * ((playerLevel * 2) + 1));
+    if (randomNumber <= 50) {
+        rarity = "Common";
+        rarityMulty = 0.5;
+    }
+    else if (randomNumber > 50 && randomNumber <= 80) {
+        rarity = "Uncommon";
+        rarityMulty = 0.3;
+    }
+    else if (randomNumber > 80 && randomNumber <= 95) {
+        rarity = "Rare";
+        rarityMulty = 0.15;
+    }
+    else if (randomNumber > 95 && randomNumber <= 99) {
+        rarity = "SuperRare";
+        rarityMulty = 0.04;
+    }
+    else {
+        rarity = "UltraRare";
+        rarityMulty = 0.01;
+    }
+    //Choosing Animal From Rarity
+    var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
+    var animals = titleDataResult.Data.Animals;
+    var animalsObj = JSON.parse(animals);
+    var animalsOfRarity = new Array();
+    var animalVariance = new Array();
+    var varianceSum = 0;
+    for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
+        var key = _a[_i];
+        var currentAnimal = animalsObj[key];
+        if (currentAnimal['animalRarity'] == rarity) {
+            var variance = (currentAnimal['varianceInRarityGroup']);
+            var varianceNum = +(variance);
+            varianceSum += varianceNum;
+            animalVariance.push(varianceSum);
+            animalsOfRarity.push(key);
+        }
+    }
+    randomNumber = Math.random() * varianceSum;
+    var selectedAnimalId;
+    var selectedAnimalVariance;
+    for (var i = 0; i < animalsOfRarity.length; i++) {
+        if (randomNumber > animalVariance[i]) {
+            continue;
+        }
+        selectedAnimalId = animalsOfRarity[i];
+        selectedAnimalVariance = Number(animalsObj[selectedAnimalId]['varianceInRarityGroup']) / varianceSum;
+        break;
+    }
+    var diff = (1 - rarityMulty) * (1 - selectedAnimalVariance);
+    return {
+        "UID": Guid.newGuid(),
+        "Animal_ID": selectedAnimalId,
+        "Diff": diff
+    };
 }
 var Guid = /** @class */ (function () {
     function Guid() {
