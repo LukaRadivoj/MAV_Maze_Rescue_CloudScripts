@@ -183,8 +183,8 @@ handlers.PlayFabSync = function (args) {
     var catalog = server.GetCatalogItems({});
       
     let abilityOrbs = [];
-    for (var item in store.Store) {
-        abilityOrbs.push(item);
+    for (let i = 0 ; i < store.Store.length ; i++){
+        abilityOrbs.push(store.Store[i].ItemId);
     }
 
     //Requires GUID
