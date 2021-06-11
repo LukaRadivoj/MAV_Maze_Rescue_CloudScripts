@@ -151,7 +151,7 @@ handlers.NewUserInitialisation = function (args) {
 
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: { "CollectedAnimal": updateString }
+        Data: { "CollectedAnimals": updateString }
     })
 }
 

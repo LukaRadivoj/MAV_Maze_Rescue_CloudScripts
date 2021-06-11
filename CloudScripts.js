@@ -119,7 +119,7 @@ handlers.NewUserInitialisation = function (args) {
     });
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
-        Data: { "CollectedAnimal": updateString }
+        Data: { "CollectedAnimals": updateString }
     });
 };
 //Cloud script that syncs local and cloud player data
