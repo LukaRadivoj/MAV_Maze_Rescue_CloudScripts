@@ -196,19 +196,10 @@ handlers.UseAbility = function (args) {
             if (catalog.Catalog[i].ItemId == abilityId) {
                 var price = catalog.Catalog[i].VirtualCurrencyPrices["AP"];
 
-                //server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" })
+                server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" })
 
-                var id = catalog.Catalog[i].CustomData["Ability_ID"];
-                var number = catalog.Catalog[i].CustomData["Characteristic_Number"];
-
-                return id;
-
-                var result = {
-                    "Ability_ID": id,
-                    "Characteristic_Number": number
-                }
-
-                return result;
+                var customData = catalog.Catalog[i].CustomData;
+                return customData;
             }
         }
     }
