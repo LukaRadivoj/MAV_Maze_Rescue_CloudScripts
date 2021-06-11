@@ -118,6 +118,9 @@ handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
     var playerLevel = levelResult.Statistics[0].Value;
     var playerExperience = levelResult.Statistics[1].Value;
+    var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
+    var titleDataObject = JSON.parse(titleDataResult.Data["Levels"]);
+    var exp2lvl = titleDataObject[playerLevel];
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
     var levelBracket = 0;
@@ -171,8 +174,9 @@ handlers.PlayFabSync = function (args) {
     var result = {
         "LVL": playerLevel,
         "EXP": playerExperience,
+        "EXP_TO_LVL": exp2lvl,
         "AP": playerAP,
-        "AbilityOrbs": abilityOrbs,
+        "AO_IDs": abilityOrbs,
         //"Animals":animals,
         "RO": rescueOperationObject
     };
