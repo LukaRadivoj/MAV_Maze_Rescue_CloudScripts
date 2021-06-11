@@ -201,7 +201,17 @@ handlers.PlayFabSync = function (args) {
             "Guid" : uuidv4(),
             "AnimalId" : animalObj.key
         }
+        animals.push(tmpAnimal);
     }
 
     var rescueOperationData = server.GetUserData({PlayFabId: currentPlayerId, Keys : ["CurrentRescueOperation"]})   
+
+    var result = {
+        "Level":playerLevel,
+        "Experience":playerExperience,
+        "AP":playerAP,
+        "AbilityOrbs":abilityOrbs,
+        "Animals":animals,
+        "RescueOperation":rescueOperationData.Data
+    }
 }
