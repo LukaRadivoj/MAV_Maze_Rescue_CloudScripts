@@ -119,7 +119,7 @@ handlers.PlayFabSync = function (args) {
     var playerLevel = levelResult.Statistics[0].Value;
     var playerExperience = levelResult.Statistics[1].Value;
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-    var playerAP = playerInventoryResult.VirtualCurrency;
+    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
     var levelBracket = 0;
     if (playerLevel >= 40) {
         levelBracket = 40;
@@ -152,7 +152,7 @@ handlers.PlayFabSync = function (args) {
         var itemObject = JSON.parse(item);
         var orb = {
             "AbilityId": itemObject["ItemId"],
-            "AbilityCost": itemObject["VirtualCurrencyPrices"]["AP"]
+            "AbilityCost": itemObject
         };
         abilityOrbs.push(orb);
     }
