@@ -132,7 +132,7 @@ handlers.NewUserInitialisation = function (args) {
 
     var updateString = JSON.stringify(
         {
-            "UID": "1234",
+            "UID": Guid.newGuid,
             "Animal_ID": "D_B1_C1",
             "Diff": 0.5,
         }
@@ -201,7 +201,11 @@ handlers.PlayFabSync = function (args) {
 
     let abilityOrbs = [];
     for (let i = 0; i < store.Store.length; i++) {
-        abilityOrbs.push(store.Store[i].ItemId);
+        var orb = {
+            "ID" : store.Store[i].ItemId,
+            "Cost": store.Store[i].VirtualCurrencyPrices["AP"]
+        }
+        abilityOrbs.push(orb);
     }
 
 
@@ -213,14 +217,24 @@ handlers.PlayFabSync = function (args) {
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
     var result = {
-        "LVL": playerLevel,
-        "EXP": playerExperience,
-        "EXP_TO_LVL": exp2lvl,
+        "Lvl": playerLevel,
+        "Exp": playerExperience,
+        "Exp_To_Lvl": exp2lvl,
         "AP": playerAP,
-        "AO_IDs": abilityOrbs,
+        "AOs": abilityOrbs,
         "Animal_IDs": animalsObject["Animals"],
         "RO": rescueOperationObject
     }
 
     return result;
+}
+
+class Guid {
+    static newGuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 }
