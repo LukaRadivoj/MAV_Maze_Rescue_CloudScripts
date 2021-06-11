@@ -178,5 +178,6 @@ define("CloudScripts", ["require", "exports", "uuid"], function (require, export
             "Animals": animals,
             "RescueOperation": rescueOperationData.Data
         };
+        return result;
     };
 });

@@ -214,4 +214,6 @@ handlers.PlayFabSync = function (args) {
         "Animals":animals,
         "RescueOperation":rescueOperationData.Data
     }
+
+    return result;
 }
