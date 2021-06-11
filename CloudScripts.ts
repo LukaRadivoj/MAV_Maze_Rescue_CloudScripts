@@ -189,19 +189,22 @@ handlers.UseAbility = function (args) {
     var storeId = "S_" + levelBracket;
     var store = server.GetStoreItems({ StoreId: storeId });
 
-    for (let i = 0; i < store.Store.length; i++) {
-        if (store.Store[i].ItemId == abilityId) {
-            var price = store.Store[i].VirtualCurrencyPrices["AP"];
-            server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AR" })
-            var id = store.Store[i].CustomData;
-            return id;
-            var number = store.Store[i].CustomData["Characteristic_Number"];
-            var result =
-            {
-                "Ability_ID": id,
-                "Characteristic_Number": number
+    if (store.Store.some((e) => e.ItemId = abilityId)) {
+
+        var catalog = server.GetCatalogItems({});
+        for (let i = 0; i < catalog.Catalog.length; i++) {
+            if (catalog.Catalog[i].ItemId == abilityId) {
+                var price = catalog.Catalog[i].VirtualCurrencyPrices["AP"];
+                var id = catalog.Catalog[i].CustomData["Ability_ID"];
+                var number = catalog.Catalog[i].CustomData["Characteristic_Number"];
+
+                var result = {
+                    "Ability_ID": id,
+                    "Characteristic_Number": number
+                }
+                
+                return number;
             }
-            return result;
         }
     }
 }
