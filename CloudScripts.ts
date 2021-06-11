@@ -1,7 +1,5 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 
-//import { v4 as uuidv4 } from 'uuid';
-
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
 
@@ -128,11 +126,11 @@ handlers.NewUserInitialisation = function (args) {
             ]
         });
 
-    //var guid = uuidv4();
+    var guid = Guid.newGuid();
 
     var updateString = JSON.stringify(
         {
-            "UID": Guid.newGuid,
+            "UID": guid,
             "Animal_ID": "D_B1_C1",
             "Diff": 0.5,
         }
