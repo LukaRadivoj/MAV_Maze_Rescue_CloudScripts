@@ -164,7 +164,7 @@ handlers.PlayFabSync = function (args) {
         "EXP_TO_LVL": exp2lvl,
         "AP": playerAP,
         "AO_IDs": abilityOrbs,
-        //"Animals":animals,
+        "Animals": animals,
         "RO": rescueOperationObject
     };
     return result;
