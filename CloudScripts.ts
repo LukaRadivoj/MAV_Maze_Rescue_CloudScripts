@@ -149,7 +149,7 @@ handlers.PlayFabSync = function (args) {
     let playerExperience: number = levelResult.Statistics[1].Value;
 
     var titleDataResult = server.GetTitleData({Keys : ["Levels"]})    
-    let exp2lvl = titleDataResult.Data["Levels"][playerLevel];
+    let exp2lvl = titleDataResult.Data["Levels"];
 
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
