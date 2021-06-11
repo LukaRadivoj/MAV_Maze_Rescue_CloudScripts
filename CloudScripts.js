@@ -59,31 +59,7 @@ handlers.GetMazeConfig = function (args) {
 handlers.GetUnlockedOrbs = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
     var playerLevel = levelResult.Statistics[0].Value;
-    var levelBracket = 0;
-    if (playerLevel >= 40) {
-        levelBracket = 40;
-    }
-    else if (playerLevel >= 30) {
-        levelBracket = 30;
-    }
-    else if (playerLevel >= 23) {
-        levelBracket = 23;
-    }
-    else if (playerLevel >= 15) {
-        levelBracket = 15;
-    }
-    else if (playerLevel >= 9) {
-        levelBracket = 9;
-    }
-    else if (playerLevel >= 5) {
-        levelBracket = 5;
-    }
-    else if (playerLevel >= 2) {
-        levelBracket = 2;
-    }
-    else {
-        levelBracket = 1;
-    }
+    var levelBracket = GetLevelBracket(playerLevel);
     var id = "S_" + levelBracket;
     var store = server.GetStoreItems({ StoreId: id });
     var playerInventory = server.GetUserInventory({ PlayFabId: currentPlayerId });
@@ -131,31 +107,7 @@ handlers.PlayFabSync = function (args) {
     var exp2lvl = expLvlobject[playerLevel];
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-    var levelBracket = 0;
-    if (playerLevel >= 40) {
-        levelBracket = 40;
-    }
-    else if (playerLevel >= 30) {
-        levelBracket = 30;
-    }
-    else if (playerLevel >= 23) {
-        levelBracket = 23;
-    }
-    else if (playerLevel >= 15) {
-        levelBracket = 15;
-    }
-    else if (playerLevel >= 9) {
-        levelBracket = 9;
-    }
-    else if (playerLevel >= 5) {
-        levelBracket = 5;
-    }
-    else if (playerLevel >= 2) {
-        levelBracket = 2;
-    }
-    else {
-        levelBracket = 1;
-    }
+    var levelBracket = GetLevelBracket(playerLevel);
     var storeId = "S_" + levelBracket;
     var store = server.GetStoreItems({ StoreId: storeId });
     var abilityOrbs = [];
@@ -182,6 +134,58 @@ handlers.PlayFabSync = function (args) {
     };
     return result;
 };
+handlers.ResolveRescueOperation = function (args) {
+};
+handlers.UseAbility = function (args) {
+    var abilityId = args.AbilityId;
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    var playerLevel = levelResult.Statistics[0].Value;
+    var levelBracket = GetLevelBracket(playerLevel);
+    var storeId = "S_" + levelBracket;
+    var store = server.GetStoreItems({ StoreId: storeId });
+    for (var i = 0; i < store.Store.length; i++) {
+        if (store.Store[i].ItemId == abilityId) {
+            var price = store.Store[i].VirtualCurrencyPrices["AP"];
+            server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AR" });
+            var id = store.Store[i].CustomData["Ability_ID"];
+            var number = store.Store[i].CustomData["Characteristic_Number"];
+            var result = {
+                "Ability_ID": id,
+                "Characteristic_Number": number
+            };
+            return result;
+        }
+    }
+};
+function GetLevelBracket(level) {
+    var playerLevel = level;
+    var levelBracket;
+    if (playerLevel >= 40) {
+        levelBracket = 40;
+    }
+    else if (playerLevel >= 30) {
+        levelBracket = 30;
+    }
+    else if (playerLevel >= 23) {
+        levelBracket = 23;
+    }
+    else if (playerLevel >= 15) {
+        levelBracket = 15;
+    }
+    else if (playerLevel >= 9) {
+        levelBracket = 9;
+    }
+    else if (playerLevel >= 5) {
+        levelBracket = 5;
+    }
+    else if (playerLevel >= 2) {
+        levelBracket = 2;
+    }
+    else {
+        levelBracket = 1;
+    }
+    return levelBracket;
+}
 var Guid = /** @class */ (function () {
     function Guid() {
     }
