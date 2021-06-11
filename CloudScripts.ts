@@ -191,7 +191,7 @@ handlers.PlayFabSync = function (args) {
         abilityOrbs.push(orb);
     }
 
-
+    /*
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})
     let animals = [];
 
@@ -203,7 +203,7 @@ handlers.PlayFabSync = function (args) {
         }
         animals.push(tmpAnimal);
     }
-
+    */
     var rescueOperationData = server.GetUserData({PlayFabId: currentPlayerId, Keys : ["CurrentRescueOperation"]})   
 
     var result = {
@@ -211,7 +211,7 @@ handlers.PlayFabSync = function (args) {
         "Experience":playerExperience,
         "AP":playerAP,
         "AbilityOrbs":abilityOrbs,
-        "Animals":animals,
+        //"Animals":animals,
         "RescueOperation":rescueOperationData.Data
     }
 

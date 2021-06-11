@@ -159,23 +159,26 @@ define("CloudScripts", ["require", "exports", "uuid"], function (require, export
             };
             abilityOrbs.push(orb);
         }
-        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Animals"] });
-        var animals = [];
-        for (var animal in animalData.Data) {
+        /*
+        var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["Animals"]})
+        let animals = [];
+    
+        for (var animal in animalData.Data){
             var animalObj = JSON.parse(animal);
             var tmpAnimal = {
-                "Guid": uuid_1.v4(),
-                "AnimalId": animalObj.key
-            };
+                "Guid" : uuidv4(),
+                "AnimalId" : animalObj.key
+            }
             animals.push(tmpAnimal);
         }
+        */
         var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
         var result = {
             "Level": playerLevel,
             "Experience": playerExperience,
             "AP": playerAP,
             "AbilityOrbs": abilityOrbs,
-            "Animals": animals,
+            //"Animals":animals,
             "RescueOperation": rescueOperationData.Data
         };
         return result;
