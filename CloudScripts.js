@@ -155,7 +155,8 @@ handlers.PlayFabSync = function (args) {
         abilityOrbs.push(store.Store[i].ItemId);
     }
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
-    var animals = animalData.Data;
+    var animals = animalData.Data["CollectedAnimals"].Value;
+    var animalsObject = JSON.parse(animals);
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
     var result = {
@@ -164,7 +165,7 @@ handlers.PlayFabSync = function (args) {
         "EXP_TO_LVL": exp2lvl,
         "AP": playerAP,
         "AO_IDs": abilityOrbs,
-        "Animal_IDs": animals,
+        "Animal_IDs": animalsObject["Animals"],
         "RO": rescueOperationObject
     };
     return result;

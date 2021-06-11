@@ -148,8 +148,8 @@ handlers.PlayFabSync = function (args) {
     let playerLevel: number = levelResult.Statistics[0].Value;
     let playerExperience: number = levelResult.Statistics[1].Value;
 
-    var titleDataResult = server.GetTitleData({Keys : ["Levels"]})  
-    var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])  
+    var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
+    var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
     let exp2lvl = expLvlobject[playerLevel];
 
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
@@ -184,16 +184,17 @@ handlers.PlayFabSync = function (args) {
 
     var storeId = "S_" + levelBracket;
     var store = server.GetStoreItems({ StoreId: storeId });
-      
+
     let abilityOrbs = [];
-    for (let i = 0 ; i < store.Store.length ; i++){
+    for (let i = 0; i < store.Store.length; i++) {
         abilityOrbs.push(store.Store[i].ItemId);
     }
 
-    
-    var animalData = server.GetUserData({ PlayFabId: currentPlayerId , Keys : ["CollectedAnimals"]})    
-    var animals = animalData.Data;
-    
+
+    var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
+    var animals = animalData.Data["CollectedAnimals"].Value;
+    var animalsObject = JSON.parse(animals);
+
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
@@ -203,7 +204,7 @@ handlers.PlayFabSync = function (args) {
         "EXP_TO_LVL": exp2lvl,
         "AP": playerAP,
         "AO_IDs": abilityOrbs,
-        "Animal_IDs":animals,
+        "Animal_IDs": animalsObject["Animals"],
         "RO": rescueOperationObject
     }
 
