@@ -203,7 +203,7 @@ handlers.UseAbility = function (args) {
                     "Characteristic_Number": number
                 }
                 
-                return number;
+                return result;
             }
         }
     }

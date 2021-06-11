@@ -154,7 +154,7 @@ handlers.UseAbility = function (args) {
                     "Ability_ID": id,
                     "Characteristic_Number": number
                 };
-                return number;
+                return result;
             }
         }
     }
