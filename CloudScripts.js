@@ -155,7 +155,7 @@ handlers.PlayFabSync = function (args) {
         abilityOrbs.push(store.Store[i].ItemId);
     }
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Animals"] });
-    var animals = animalData.Data["Animals"].Value;
+    var animals = animalData.Data;
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
     var result = {
