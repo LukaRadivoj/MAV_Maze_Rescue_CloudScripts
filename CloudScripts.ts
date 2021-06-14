@@ -107,6 +107,7 @@ handlers.NewUserInitialisation = function (args) {
             "UID": guid,
             "Animal_ID": "D_B1_C1",
             "Diff": 0.5,
+            "AdWatched": false
         }
     )
 
@@ -286,7 +287,7 @@ handlers.ResolveRescueOperation = function (args) {
 
         return result;
     } else if (!success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
-        var addWatched = args.addWatched;
+        var addWatched = rescueOperationObject["AdWatched"]
         if (addWatched) {
             var expGain = diff * 200;
 
@@ -354,7 +355,24 @@ handlers.ResolveRescueOperation = function (args) {
             }
 
             return result;
+
         } else {
+
+            var updateString = JSON.stringify(
+                {
+                    "UID": rescueOperationObject["UID"],
+                    "Animal_ID": rescueOperationObject["Animal_ID"],
+                    "Diff": rescueOperationObject["Diff"],
+                    "AdWatched": true
+                }
+            )
+        
+            server.UpdateUserData({
+                PlayFabId: currentPlayerId,
+                Data: { "CurrentRescueOperation": updateString }
+            })
+            
+
             var noResult = {
                 "New_Animal": null,
                 "New_AOs": null,
@@ -498,7 +516,8 @@ function GetNewRescueOperation() {
     return {
         "UID": Guid.newGuid(),
         "Animal_ID": selectedAnimalId,
-        "Diff": diff
+        "Diff": diff,
+        "AdWatched": false
     }
 }
 
