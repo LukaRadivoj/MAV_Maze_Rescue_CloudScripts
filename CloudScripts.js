@@ -287,7 +287,7 @@ handlers.ResolveRescueOperation = function (args) {
                 "Exp_To_Lvl": exp2lvl,
                 "RO": newRescueOperation
             };
-            return result;
+            return failComercialResult;
         }
         else {
             var updateString = JSON.stringify({
