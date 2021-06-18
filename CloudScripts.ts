@@ -277,6 +277,7 @@ handlers.ResolveRescueOperation = function (args) {
         })
 
         var result = {
+            "RO_Code": 'SF',
             "New_Animal": newAnimal,
             "New_AOs": newAbilityOrbs,
             "Exp": playerExperience,
@@ -345,8 +346,8 @@ handlers.ResolveRescueOperation = function (args) {
                 Data: { "CurrentRescueOperation": newRescueString }
             })
 
-            var result = {
-                "New_Animal": null,
+            var failComercialResult = {
+                "RO_Code": 'FF',
                 "New_AOs": newAbilityOrbs,
                 "Exp": playerExperience,
                 "Lvl": playerLevel,
@@ -371,16 +372,14 @@ handlers.ResolveRescueOperation = function (args) {
                 PlayFabId: currentPlayerId,
                 Data: { "CurrentRescueOperation": updateString }
             })
-            
 
+            var numberOfMoves = diff * 10;
+            
             var noResult = {
-                "New_Animal": null,
-                "New_AOs": null,
-                "Exp": null,
-                "Lvl": null,
-                "Exp_To_Lvl": null,
-                "RO": null
+                "RO_Code": 'FC',
+                "Add_Moves" : numberOfMoves
             }
+
             return noResult;
         }
     }
