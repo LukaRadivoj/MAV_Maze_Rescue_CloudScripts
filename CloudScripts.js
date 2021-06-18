@@ -216,9 +216,7 @@ handlers.ResolveRescueOperation = function (args) {
         var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
         var animals = animalData.Data["CollectedAnimals"].Value;
         var obj = JSON.parse(animals);
-        obj['CollectedAnimals'].push(newAnimal);
-        animals = obj;
-        return animals;
+        return obj;
         server.UpdateUserData({
             PlayFabId: currentPlayerId,
             Data: { "CollectedAnimals": animals }
