@@ -197,6 +197,7 @@ handlers.ResolveRescueOperation = function (args) {
         }
 
         var newAnimal;
+        return alreadyOwned;
         if (!alreadyOwned) {
             var animalUID = Guid.newGuid();
             newAnimal = {
@@ -205,7 +206,7 @@ handlers.ResolveRescueOperation = function (args) {
             }
         }
 
-        return newAnimal;
+        return newAnimal
 
         var expGain = diff * 1000;
 
