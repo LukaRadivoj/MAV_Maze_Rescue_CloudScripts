@@ -215,7 +215,9 @@ handlers.ResolveRescueOperation = function (args) {
         });
         var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
         var animals = animalData.Data["CollectedAnimals"].Value;
-        animals.concat(JSON.stringify(newAnimal));
+        var obj = JSON.parse(animals);
+        obj['CollectedAnimals'].push(newAnimal);
+        animals = obj;
         return animals;
         server.UpdateUserData({
             PlayFabId: currentPlayerId,
