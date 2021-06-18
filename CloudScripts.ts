@@ -180,7 +180,7 @@ handlers.ResolveRescueOperation = function (args) {
     let diff = args.Difficulty;
     let success = args.Success;
     let alreadyOwned = false;
-  
+
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
@@ -190,14 +190,15 @@ handlers.ResolveRescueOperation = function (args) {
         var animals = animalData.Data["CollectedAnimals"].Value;
         var animalsObject = JSON.parse(animals);
 
-        for (var key in Object.keys(animalsObject)) {
-            if (key = animalId) {
-                alreadyOwned = true;
+        if (Object.keys(animalsObject).length > 0) {
+            for (var key in Object.keys(animalsObject)) {
+                if (key = animalId) {
+                    alreadyOwned = true;
+                }
             }
         }
 
         var newAnimal;
-        return alreadyOwned;
         if (!alreadyOwned) {
             var animalUID = Guid.newGuid();
             newAnimal = {
