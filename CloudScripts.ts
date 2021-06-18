@@ -178,11 +178,9 @@ handlers.PlayFabSync = function (args) {
 handlers.ResolveRescueOperation = function (args) {
     let animalId = args.AnimalId;
     let diff = args.Difficulty;
-    let success = args.success;
+    let success = args.Success;
     let alreadyOwned = false;
-
-    return success;
-
+  
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 

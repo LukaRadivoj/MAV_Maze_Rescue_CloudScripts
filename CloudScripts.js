@@ -138,9 +138,8 @@ handlers.PlayFabSync = function (args) {
 handlers.ResolveRescueOperation = function (args) {
     var animalId = args.AnimalId;
     var diff = args.Difficulty;
-    var success = args.success;
+    var success = args.Success;
     var alreadyOwned = false;
-    return success;
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
     if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
