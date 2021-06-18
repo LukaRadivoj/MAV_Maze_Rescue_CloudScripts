@@ -190,6 +190,8 @@ handlers.ResolveRescueOperation = function (args) {
         var animals = animalData.Data["CollectedAnimals"].Value;
         var animalsObject = JSON.parse(animals);
 
+        return animals;
+
         for (var key in Object.keys(animalsObject)) {
             if (key = animalId) {
                 alreadyOwned = true;
