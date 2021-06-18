@@ -355,7 +355,7 @@ handlers.ResolveRescueOperation = function (args) {
                 "RO": newRescueOperation
             }
 
-            return result;
+            return failComercialResult;
 
         } else {
 
@@ -367,17 +367,17 @@ handlers.ResolveRescueOperation = function (args) {
                     "AdWatched": true
                 }
             )
-        
+
             server.UpdateUserData({
                 PlayFabId: currentPlayerId,
                 Data: { "CurrentRescueOperation": updateString }
             })
 
-            var numberOfMoves =  Math.floor(diff * 10);
-            
+            var numberOfMoves = Math.floor(diff * 10);
+
             var noResult = {
                 "RO_Code": 'FC',
-                "Add_Moves" : numberOfMoves
+                "Add_Moves": numberOfMoves
             }
 
             return noResult;
