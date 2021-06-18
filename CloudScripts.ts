@@ -181,6 +181,8 @@ handlers.ResolveRescueOperation = function (args) {
     let success = args.success;
     let alreadyOwned = false;
 
+    return success;
+
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
