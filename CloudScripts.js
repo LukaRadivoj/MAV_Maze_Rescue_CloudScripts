@@ -300,7 +300,7 @@ handlers.ResolveRescueOperation = function (args) {
                 PlayFabId: currentPlayerId,
                 Data: { "CurrentRescueOperation": updateString }
             });
-            var numberOfMoves = diff * 10;
+            var numberOfMoves = Math.floor(diff * 10);
             var noResult = {
                 "RO_Code": 'FC',
                 "Add_Moves": numberOfMoves

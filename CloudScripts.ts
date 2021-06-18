@@ -373,7 +373,7 @@ handlers.ResolveRescueOperation = function (args) {
                 Data: { "CurrentRescueOperation": updateString }
             })
 
-            var numberOfMoves = diff * 10;
+            var numberOfMoves =  Math.floor(diff * 10);
             
             var noResult = {
                 "RO_Code": 'FC',
