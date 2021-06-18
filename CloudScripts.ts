@@ -189,7 +189,7 @@ handlers.ResolveRescueOperation = function (args) {
         var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
         var animals = animalData.Data["CollectedAnimals"].Value;
         var animalsObject = JSON.parse(animals);
-        
+
 
         if (Object.keys(animalsObject).length > 1) {
             for (var key in Object.keys(animalsObject)) {
@@ -200,11 +200,10 @@ handlers.ResolveRescueOperation = function (args) {
         }
 
         var newAnimal;
-        if (!alreadyOwned) {            
-            newAnimal = {                
-                animalId
-            }
-        }       
+        if (!alreadyOwned) {
+            newAnimal = animalId
+
+        }
 
         var expGain = diff * 1000;
 
@@ -269,12 +268,12 @@ handlers.ResolveRescueOperation = function (args) {
         })
 
         var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
-        var animals = animalData.Data["CollectedAnimals"].Value;        
-        
+        var animals = animalData.Data["CollectedAnimals"].Value;
+
         var animalsObj = JSON.parse(animals);
         animalsObj['Animals'].push(newAnimal);
 
-        
+
 
         server.UpdateUserData({
             PlayFabId: currentPlayerId,

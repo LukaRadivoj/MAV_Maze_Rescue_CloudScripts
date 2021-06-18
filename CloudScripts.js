@@ -155,9 +155,7 @@ handlers.ResolveRescueOperation = function (args) {
         }
         var newAnimal;
         if (!alreadyOwned) {
-            newAnimal = {
-                animalId: animalId
-            };
+            newAnimal = animalId;
         }
         var expGain = diff * 1000;
         if (alreadyOwned) {
