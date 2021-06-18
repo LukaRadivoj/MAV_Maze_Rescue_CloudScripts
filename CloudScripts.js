@@ -148,7 +148,7 @@ handlers.ResolveRescueOperation = function (args) {
         var animalsObject = JSON.parse(animals);
         var animalsString = animalsObject["Animals"];
         var animalStringArray = animalsString.split(",");
-        if (animalStringArray.some(function (element) { return element = animalId; })) {
+        if (animalStringArray.some(function (element) { return element == animalId; })) {
             alreadyOwned = true;
         }
         var newAnimal;
