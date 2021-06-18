@@ -155,9 +155,7 @@ handlers.ResolveRescueOperation = function (args) {
         }
         var newAnimal;
         if (!alreadyOwned) {
-            var animalUID = Guid.newGuid();
             newAnimal = {
-                "UID": animalUID,
                 "ID": animalId
             };
         }
