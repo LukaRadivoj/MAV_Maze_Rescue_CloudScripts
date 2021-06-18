@@ -274,7 +274,7 @@ handlers.ResolveRescueOperation = function (args) {
         var animals = animalData.Data["CollectedAnimals"].Value;        
         
         var obj = JSON.parse(animals);
-        
+        obj['Animals'].push(newAnimal);
 
         return obj;
 
