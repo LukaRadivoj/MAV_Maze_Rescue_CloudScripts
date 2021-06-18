@@ -280,7 +280,7 @@ handlers.ResolveRescueOperation = function (args) {
 
         server.UpdateUserData({
             PlayFabId: currentPlayerId,
-            Data: { "CollectedAnimals": animalsObj }
+            Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
         })
 
         var result = {

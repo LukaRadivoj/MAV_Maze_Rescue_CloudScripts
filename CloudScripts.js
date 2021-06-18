@@ -219,7 +219,7 @@ handlers.ResolveRescueOperation = function (args) {
         animalsObj['Animals'].push(newAnimal);
         server.UpdateUserData({
             PlayFabId: currentPlayerId,
-            Data: { "CollectedAnimals": animalsObj }
+            Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
         });
         var result = {
             "RO_Code": 'SF',
