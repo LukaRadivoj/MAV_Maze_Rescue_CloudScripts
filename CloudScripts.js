@@ -5,7 +5,7 @@ handlers.GetMazeConfig = function (args) {
     var playerLevel = levelResult.Statistics[0].Value;
     //Choosing Rarity
     var rarity;
-    var randomNumber = Math.pow(2002 * playerLevel, 0.01015) - 1983;
+    var randomNumber = Math.random() * (Math.pow(2002 * playerLevel, 0.01015) - 1983);
     if (randomNumber <= 50) {
         rarity = "Common";
     }
