@@ -193,6 +193,8 @@ handlers.ResolveRescueOperation = function (args) {
         var animalsString : string = animalsObject["Animals"];
         var animalStringArray : Array<String> = animalsString.split(",");
 
+        return animalStringArray;
+
         if(animalStringArray.some((element) => element == animalId)){
             alreadyOwned = true;
         }        
