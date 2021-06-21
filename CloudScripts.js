@@ -321,7 +321,8 @@ handlers.UseAbility = function (args) {
                 var price = catalog.Catalog[i].VirtualCurrencyPrices["AP"];
                 server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" });
                 var customData = catalog.Catalog[i].CustomData;
-                return customData;
+                var customDataObject = JSON.parse(customData);
+                return customDataObject;
             }
         }
     }
