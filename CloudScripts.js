@@ -146,7 +146,11 @@ handlers.ResolveRescueOperation = function (args) {
         var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
         var animals = animalData.Data["CollectedAnimals"].Value;
         var animalsObject = JSON.parse(animals);
-        return animalsObject["Animals"];
+        var animalStringArray = animalsObject["Animals"];
+        if (animalStringArray.some(function (animal) { return animal == animalId; })) {
+            alreadyOwned = true;
+            return "alreadyOwned = True";
+        }
         var newAnimal;
         if (!alreadyOwned) {
             newAnimal = animalId;
