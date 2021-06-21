@@ -192,8 +192,7 @@ handlers.ResolveRescueOperation = function (args) {
         
         var animalsString : string = animalsObject["Animals"];
         var animalStringArray : Array<String> = animalsString.split(",");
-
-        return animalsString;
+        
 
         if(animalStringArray.some((element) => element == animalId)){
             alreadyOwned = true;
@@ -201,8 +200,7 @@ handlers.ResolveRescueOperation = function (args) {
 
         var newAnimal;
         if (!alreadyOwned) {
-            newAnimal = animalId
-
+            newAnimal = animalId;
         }
 
         var expGain = diff * 1000;
