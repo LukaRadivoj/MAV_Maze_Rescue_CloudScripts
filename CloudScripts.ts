@@ -194,8 +194,7 @@ handlers.ResolveRescueOperation = function (args) {
         var animalStringArray : Array<String> = animalsObject["Animals"];
 
         if(animalStringArray.some((animal) => animal == animalId)){
-            alreadyOwned = true;
-            return "alreadyOwned = True"
+            alreadyOwned = true;            
         }
 
         var newAnimal;
