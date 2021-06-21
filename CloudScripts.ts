@@ -190,6 +190,8 @@ handlers.ResolveRescueOperation = function (args) {
         var animals = animalData.Data["CollectedAnimals"].Value;
         var animalsObject = JSON.parse(animals);
 
+        return animalsObject["Animals"];
+
         return animalsObject;
 
         if (Object.keys(animalsObject).length > 1) {
