@@ -206,14 +206,16 @@ handlers.ResolveRescueOperation = function (args) {
             PlayFabId: currentPlayerId,
             Data: { "CurrentRescueOperation": newRescueString }
         });
-        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
-        var animals = animalData.Data["CollectedAnimals"].Value;
-        var animalsObj = JSON.parse(animals);
-        animalsObj['Animals'].push(newAnimal);
-        server.UpdateUserData({
-            PlayFabId: currentPlayerId,
-            Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
-        });
+        if (newAnimal != null) {
+            var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
+            var animals = animalData.Data["CollectedAnimals"].Value;
+            var animalsObj = JSON.parse(animals);
+            animalsObj['Animals'].push(newAnimal);
+            server.UpdateUserData({
+                PlayFabId: currentPlayerId,
+                Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
+            });
+        }
         var result = {
             "RO_Code": 'SF',
             "New_Animal": newAnimal,
