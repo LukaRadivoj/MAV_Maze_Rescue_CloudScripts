@@ -106,7 +106,7 @@ handlers.NewUserInitialisation = function (args) {
         {
             "UID": guid,
             "Animal_ID": "D_B1_C1",
-            "Diff": 0.5,
+            "Diff": 0.15,
             "AdWatched": false
         }
     )
