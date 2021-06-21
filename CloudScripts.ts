@@ -186,21 +186,24 @@ handlers.ResolveRescueOperation = function (args) {
 
     if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
 
-        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
+        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
         var animals = animalData.Data["CollectedAnimals"].Value;
         var animalsObject = JSON.parse(animals);
-        
-        var animalsString : string = animalsObject["Animals"];
-        var animalStringArray : Array<String> = animalsString.split(",");
-        
 
-        if(animalStringArray.some((element) => element == animalId)){
-            alreadyOwned = true;
-        }        
+        if (Object.keys(animalsObject).length > 1) {
+            for (var key in Object.keys(animalsObject)) {
+                return animalsObject[key];
+                if (key = animalId) {
+                    alreadyOwned = true;
+                }
+            }
+        }
 
         var newAnimal;
         if (!alreadyOwned) {
-            newAnimal = animalId;
+            newAnimal = {
+                animalId: animalId
+            };
         }
 
         var expGain = diff * 1000;
