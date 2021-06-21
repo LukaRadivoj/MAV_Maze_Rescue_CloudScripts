@@ -8,7 +8,7 @@ handlers.GetMazeConfig = function (args) {
 
     //Choosing Rarity
     var rarity;    
-    var randomNumber = Math.random() * (Math.pow(2002 * playerLevel, 0.01015) - 1983);
+    var randomNumber = Math.floor(Math.random() * (Math.pow(2002 * playerLevel, 0.01015) - 1983));
     if (randomNumber <= 50) {
         rarity = "Common";
     }
