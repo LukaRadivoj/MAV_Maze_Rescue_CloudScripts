@@ -205,7 +205,7 @@ handlers.ResolveRescueOperation = function (args) {
                 animalId
             };
         }
-        return newAnimal
+        return newAnimal["animalID"]
 
         var expGain = diff * 1000;
 
