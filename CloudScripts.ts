@@ -458,6 +458,7 @@ function GetNewRescueOperation() {
     var rarity;
     var rarityMulty;
     var randomNumber = Math.floor(Math.random() * (Math.pow(2002 * playerLevel, 0.01015) - 1983));
+    var rnumToWrite = randomNumber;
     if (randomNumber <= 50) {
         rarity = "Common";
         rarityMulty = 0.5;
@@ -521,7 +522,8 @@ function GetNewRescueOperation() {
         "UID": Guid.newGuid(),
         "Animal_ID": selectedAnimalId,
         "Diff": diff,
-        "AdWatched": false
+        "AdWatched": false,
+        "rand" :rnumToWrite
     }
 }
 
