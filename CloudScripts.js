@@ -361,7 +361,7 @@ function GetNewRescueOperation() {
     //Choosing Rarity
     var rarity;
     var rarityMulty;
-    var randomNumber = Math.floor(Math.random() * (2002 * (Math.pow(playerLevel, 0.01015) - 1983)));
+    var randomNumber = Math.floor(Math.random() * (2002 * Math.pow(playerLevel, 0.01015) - 1983));
     var rnumToWrite = randomNumber;
     if (randomNumber <= 50) {
         rarity = "Common";
