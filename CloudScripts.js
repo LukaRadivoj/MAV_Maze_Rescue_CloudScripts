@@ -145,7 +145,8 @@ handlers.ResolveRescueOperation = function (args) {
     if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
         var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
         var animals = animalData.Data["CollectedAnimals"].Value;
-        var animalsObject = JSON.parse(animals);
+        var animalsObject = JSON.parse(animals["Animals"]);
+        return animalsObject;
         if (Object.keys(animalsObject).length > 1) {
             for (var key in Object.keys(animalsObject)) {
                 return animalsObject[key];
