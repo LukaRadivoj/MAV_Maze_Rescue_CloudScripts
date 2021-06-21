@@ -192,8 +192,7 @@ handlers.ResolveRescueOperation = function (args) {
                 
 
         if (Object.keys(animalsObject).length > 1) {
-            for (var key in Object.keys(animalsObject)) {
-                return animalsObject[key];
+            for (var key in Object.keys(animalsObject)) {                
                 if (key = animalId) {
                     alreadyOwned = true;
                 }
@@ -206,6 +205,7 @@ handlers.ResolveRescueOperation = function (args) {
                 animalId
             };
         }
+        return newAnimal
 
         var expGain = diff * 1000;
 
