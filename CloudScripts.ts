@@ -355,7 +355,7 @@ handlers.ResolveRescueOperation = function (args) {
             var turnsLeft = args.TurnsLeft;
             var turnsGiven = args.turnsGiven;
     
-            var expSkillMulty = turnsLeft/turnsGiven;
+            var expSkillMulty = 1 + (1 - turnsLeft/turnsGiven);
     
             var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
 
