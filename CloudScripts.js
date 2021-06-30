@@ -5,7 +5,22 @@ handlers.GetMazeConfig = function (args) {
     var playerLevel = levelResult.Statistics[0].Value;
     //Choosing Rarity
     var rarity;
-    var randomNumber = Math.floor(Math.random() * (Math.pow(2002 * playerLevel, 0.01015) - 1983));
+    var randomNumber;
+    if (playerLevel < 5) {
+        randomNumber = Math.floor(Math.random() * 51);
+    }
+    else if (playerLevel < 10) {
+        randomNumber = Math.floor(Math.random() * 81);
+    }
+    else if (playerLevel < 16) {
+        randomNumber = Math.floor(Math.random() * 96);
+    }
+    else if (playerLevel < 22) {
+        randomNumber = Math.floor(Math.random() * 100);
+    }
+    else {
+        randomNumber = Math.floor(Math.random() * 101);
+    }
     if (randomNumber <= 50) {
         rarity = "Common";
     }
@@ -154,9 +169,40 @@ handlers.ResolveRescueOperation = function (args) {
         if (!alreadyOwned) {
             newAnimal = animalId;
         }
-        var expGain = diff * 1000;
+        var rarity;
+        var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
+        var animals = titleDataResult.Data.Animals;
+        var animalsObj = JSON.parse(animals);
+        for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
+            var key = _a[_i];
+            var currentAnimal = animalsObj[key];
+            if (currentAnimal['Animal_ID'] == animalId) {
+                rarity = currentAnimal['animalRarity'];
+            }
+        }
+        var expRarityMulty;
+        switch (rarity) {
+            case "Common":
+                expRarityMulty = 1;
+                break;
+            case "Uncommon":
+                expRarityMulty = 1.1;
+                break;
+            case "Rare":
+                expRarityMulty = 1.2;
+                break;
+            case "SuperRare":
+                expRarityMulty = 1.3;
+                break;
+            case "UltraRare":
+                expRarityMulty = 1.4;
+                break;
+        }
+        var turnsLeft = args.TurnsLeft;
+        var turnsGiven = args.turnsGiven;
+        var expSkillMulty = turnsLeft / turnsGiven;
+        var expGain = Math.floor(expRarityMulty * 100 * expSkillMulty);
         if (alreadyOwned) {
-            expGain += diff * 100;
             var currencyGain = Math.floor(20 * diff);
             server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: currencyGain, VirtualCurrency: "AP" });
         }
@@ -230,7 +276,10 @@ handlers.ResolveRescueOperation = function (args) {
     else if (!success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
         var addWatched = rescueOperationObject["AdWatched"];
         if (addWatched) {
-            var expGain = diff * 200;
+            var turnsLeft = args.TurnsLeft;
+            var turnsGiven = args.turnsGiven;
+            var expSkillMulty = turnsLeft / turnsGiven;
+            var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
             var playerLevel = levelResult.Statistics[0].Value;
             var playerExperience = levelResult.Statistics[1].Value;
@@ -298,7 +347,7 @@ handlers.ResolveRescueOperation = function (args) {
                 PlayFabId: currentPlayerId,
                 Data: { "CurrentRescueOperation": updateString }
             });
-            var numberOfMoves = Math.floor(diff * 10);
+            var numberOfMoves = Math.floor(diff * 20);
             var noResult = {
                 "RO_Code": 'FC',
                 "Add_Moves": numberOfMoves
@@ -363,7 +412,6 @@ function GetNewRescueOperation() {
     var rarity;
     var rarityMulty;
     var randomNumber = Math.floor(Math.random() * (2002 * Math.pow(playerLevel, 0.01015) - 1983));
-    var rnumToWrite = randomNumber;
     if (randomNumber <= 50) {
         rarity = "Common";
         rarityMulty = 0.5;
@@ -418,8 +466,7 @@ function GetNewRescueOperation() {
         "UID": Guid.newGuid(),
         "Animal_ID": selectedAnimalId,
         "Diff": diff,
-        "AdWatched": false,
-        "rand": rnumToWrite
+        "AdWatched": false
     };
 }
 var Guid = /** @class */ (function () {
