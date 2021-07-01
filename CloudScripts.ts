@@ -219,7 +219,7 @@ handlers.ResolveRescueOperation = function (args) {
         var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
         var animals = titleDataResult.Data.Animals;
         var animalsObj = JSON.parse(animals);
-
+        return animalsObj;
         for (var key of Object.keys(animalsObj)) {
             var currentAnimal = JSON.parse(animalsObj[key]);            
             return currentAnimal;
