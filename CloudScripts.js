@@ -321,6 +321,7 @@ handlers.ResolveRescueOperation = function (args) {
                 ]
             });
             var newRescueOperation = GetNewRescueOperation();
+            return newRescueOperation;
             var newRescueString = JSON.stringify(newRescueOperation);
             server.UpdateUserData({
                 PlayFabId: currentPlayerId,
