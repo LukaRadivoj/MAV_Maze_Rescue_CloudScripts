@@ -220,7 +220,6 @@ handlers.ResolveRescueOperation = function (args) {
         var animals = titleDataResult.Data.Animals;
         var animalsObj = JSON.parse(animals);
         for (var key of Object.keys(animalsObj)) {
-            return key;
             var currentAnimal = animalsObj[key];
             if (key == animalId) {
                 rarity = currentAnimal['animalRarity'];

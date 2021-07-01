@@ -175,7 +175,6 @@ handlers.ResolveRescueOperation = function (args) {
         var animalsObj = JSON.parse(animals);
         for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
             var key = _a[_i];
-            return key;
             var currentAnimal = animalsObj[key];
             if (key == animalId) {
                 rarity = currentAnimal['animalRarity'];
