@@ -222,7 +222,7 @@ handlers.ResolveRescueOperation = function (args) {
 
         for (var key of Object.keys(animalsObj)) {
             var currentAnimal = JSON.parse(animalsObj[key]);            
-            if (currentAnimal['Animal_ID'] == animalId) {
+            if (key == animalId) {
                 rarity = currentAnimal['animalRarity'];
                 return rarity;
             }
