@@ -370,7 +370,7 @@ handlers.ResolveRescueOperation = function (args) {
             switch (rarity) {
 
                 case "Common":
-                    expRarityMulty = 1;
+                    expRarityMulty = 1.0;
                     break;
 
                 case "Uncommon":
