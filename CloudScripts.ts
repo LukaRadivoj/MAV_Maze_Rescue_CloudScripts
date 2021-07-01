@@ -381,6 +381,11 @@ handlers.ResolveRescueOperation = function (args) {
 
             var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
 
+            return {
+                "Skill" : expSkillMulty,
+                "Rarity" : expRarityMulty
+            }
+
             var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
 
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
