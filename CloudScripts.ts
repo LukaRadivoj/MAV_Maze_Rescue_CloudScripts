@@ -224,8 +224,8 @@ handlers.ResolveRescueOperation = function (args) {
             var currentAnimal = animalsObj[key];
             if (currentAnimal['Animal_ID'] == animalId) {
                 rarity = currentAnimal['animalRarity'];
-                return rarity;
             }
+            return currentAnimal;
         }
 
         var expRarityMulty;
