@@ -279,6 +279,17 @@ handlers.ResolveRescueOperation = function (args) {
             var turnsLeft = args.TurnsLeft;
             var turnsGiven = args.TurnsGiven;
             var expRarityMulty;
+            var rarity;
+            var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
+            var animals = titleDataResult.Data.Animals;
+            var animalsObj = JSON.parse(animals);
+            for (var _b = 0, _c = Object.keys(animalsObj); _b < _c.length; _b++) {
+                var key = _c[_b];
+                var currentAnimal = animalsObj[key];
+                if (key == animalId) {
+                    rarity = currentAnimal['animalRarity'];
+                }
+            }
             switch (rarity) {
                 case "Common":
                     expRarityMulty = 1;
