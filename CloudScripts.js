@@ -173,11 +173,9 @@ handlers.ResolveRescueOperation = function (args) {
         var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
         var animals = titleDataResult.Data.Animals;
         var animalsObj = JSON.parse(animals);
-        return animalsObj;
         for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
             var key = _a[_i];
             var currentAnimal = JSON.parse(animalsObj[key]);
-            return currentAnimal;
             if (key == animalId) {
                 rarity = currentAnimal['animalRarity'];
             }
@@ -193,10 +191,10 @@ handlers.ResolveRescueOperation = function (args) {
             case "Rare":
                 expRarityMulty = 1.2;
                 break;
-            case "SuperRare":
+            case "Super Rare":
                 expRarityMulty = 1.3;
                 break;
-            case "UltraRare":
+            case "Ultra Rare":
                 expRarityMulty = 1.4;
                 break;
         }
