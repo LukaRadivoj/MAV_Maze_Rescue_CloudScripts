@@ -218,11 +218,12 @@ handlers.ResolveRescueOperation = function (args) {
         var rarity;
         var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
         var animals = titleDataResult.Data.Animals;
-        var animalsObj = JSON.parse(animals);        
+        var animalsObj = JSON.parse(animals);
         for (var key of Object.keys(animalsObj)) {
-            var currentAnimal = JSON.parse(animalsObj[key]);                        
+            return key;
+            var currentAnimal = animalsObj[key];
             if (key == animalId) {
-                rarity = currentAnimal['animalRarity'];                
+                rarity = currentAnimal['animalRarity'];
             }
         }
 
@@ -254,7 +255,7 @@ handlers.ResolveRescueOperation = function (args) {
         var turnsLeft = args.TurnsLeft;
         var turnsGiven = args.TurnsGiven;
 
-        var expSkillMulty = turnsLeft/turnsGiven;
+        var expSkillMulty = turnsLeft / turnsGiven;
 
 
 
@@ -353,9 +354,9 @@ handlers.ResolveRescueOperation = function (args) {
 
             var turnsLeft = args.TurnsLeft;
             var turnsGiven = args.TurnsGiven;
-    
-            var expSkillMulty = 1 + (1 - turnsLeft/turnsGiven);
-    
+
+            var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
+
             var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
 
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
@@ -519,7 +520,20 @@ function GetNewRescueOperation() {
     //Choosing Rarity
     var rarity;
     var rarityMulty;
-    var randomNumber = Math.floor(Math.random() * (2002 * Math.pow(playerLevel, 0.01015) - 1983));
+    var randomNumber;
+
+    if (playerLevel < 5) {
+        randomNumber = Math.floor(Math.random() * 51);
+    } else if (playerLevel < 10) {
+        randomNumber = Math.floor(Math.random() * 81);
+    } else if (playerLevel < 16) {
+        randomNumber = Math.floor(Math.random() * 96);
+    } else if (playerLevel < 22) {
+        randomNumber = Math.floor(Math.random() * 100);
+    } else {
+        randomNumber = Math.floor(Math.random() * 101);
+    }
+
     if (randomNumber <= 50) {
         rarity = "Common";
         rarityMulty = 0.5;

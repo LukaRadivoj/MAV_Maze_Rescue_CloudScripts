@@ -175,7 +175,8 @@ handlers.ResolveRescueOperation = function (args) {
         var animalsObj = JSON.parse(animals);
         for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
             var key = _a[_i];
-            var currentAnimal = JSON.parse(animalsObj[key]);
+            return key;
+            var currentAnimal = animalsObj[key];
             if (key == animalId) {
                 rarity = currentAnimal['animalRarity'];
             }
@@ -411,7 +412,22 @@ function GetNewRescueOperation() {
     //Choosing Rarity
     var rarity;
     var rarityMulty;
-    var randomNumber = Math.floor(Math.random() * (2002 * Math.pow(playerLevel, 0.01015) - 1983));
+    var randomNumber;
+    if (playerLevel < 5) {
+        randomNumber = Math.floor(Math.random() * 51);
+    }
+    else if (playerLevel < 10) {
+        randomNumber = Math.floor(Math.random() * 81);
+    }
+    else if (playerLevel < 16) {
+        randomNumber = Math.floor(Math.random() * 96);
+    }
+    else if (playerLevel < 22) {
+        randomNumber = Math.floor(Math.random() * 100);
+    }
+    else {
+        randomNumber = Math.floor(Math.random() * 101);
+    }
     if (randomNumber <= 50) {
         rarity = "Common";
         rarityMulty = 0.5;
