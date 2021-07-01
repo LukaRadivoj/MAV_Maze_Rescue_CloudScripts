@@ -278,6 +278,24 @@ handlers.ResolveRescueOperation = function (args) {
         if (addWatched) {
             var turnsLeft = args.TurnsLeft;
             var turnsGiven = args.TurnsGiven;
+            var expRarityMulty;
+            switch (rarity) {
+                case "Common":
+                    expRarityMulty = 1;
+                    break;
+                case "Uncommon":
+                    expRarityMulty = 1.1;
+                    break;
+                case "Rare":
+                    expRarityMulty = 1.2;
+                    break;
+                case "Super Rare":
+                    expRarityMulty = 1.3;
+                    break;
+                case "Ultra Rare":
+                    expRarityMulty = 1.4;
+                    break;
+            }
             var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
             var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
@@ -321,7 +339,6 @@ handlers.ResolveRescueOperation = function (args) {
                 ]
             });
             var newRescueOperation = GetNewRescueOperation();
-            return newRescueOperation;
             var newRescueString = JSON.stringify(newRescueOperation);
             server.UpdateUserData({
                 PlayFabId: currentPlayerId,
