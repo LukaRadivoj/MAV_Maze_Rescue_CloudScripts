@@ -179,7 +179,6 @@ handlers.ResolveRescueOperation = function (args) {
             if (currentAnimal['Animal_ID'] == animalId) {
                 rarity = currentAnimal['animalRarity'];
             }
-            return currentAnimal;
         }
         var expRarityMulty;
         switch (rarity) {
@@ -200,7 +199,7 @@ handlers.ResolveRescueOperation = function (args) {
                 break;
         }
         var turnsLeft = args.TurnsLeft;
-        var turnsGiven = args.turnsGiven;
+        var turnsGiven = args.TurnsGiven;
         var expSkillMulty = turnsLeft / turnsGiven;
         var expGain = Math.floor(expRarityMulty * 100 * expSkillMulty);
         if (alreadyOwned) {
@@ -278,7 +277,7 @@ handlers.ResolveRescueOperation = function (args) {
         var addWatched = rescueOperationObject["AdWatched"];
         if (addWatched) {
             var turnsLeft = args.TurnsLeft;
-            var turnsGiven = args.turnsGiven;
+            var turnsGiven = args.TurnsGiven;
             var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
             var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });

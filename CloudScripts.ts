@@ -225,7 +225,6 @@ handlers.ResolveRescueOperation = function (args) {
             if (currentAnimal['Animal_ID'] == animalId) {
                 rarity = currentAnimal['animalRarity'];
             }
-            return currentAnimal;
         }
 
         var expRarityMulty;
@@ -254,7 +253,7 @@ handlers.ResolveRescueOperation = function (args) {
         }
 
         var turnsLeft = args.TurnsLeft;
-        var turnsGiven = args.turnsGiven;
+        var turnsGiven = args.TurnsGiven;
 
         var expSkillMulty = turnsLeft/turnsGiven;
 
@@ -354,7 +353,7 @@ handlers.ResolveRescueOperation = function (args) {
         if (addWatched) {
 
             var turnsLeft = args.TurnsLeft;
-            var turnsGiven = args.turnsGiven;
+            var turnsGiven = args.TurnsGiven;
     
             var expSkillMulty = 1 + (1 - turnsLeft/turnsGiven);
     
