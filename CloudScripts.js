@@ -506,11 +506,11 @@ function GetNewRescueOperation() {
         break;
     }
     var diff = (1 - rarityMulty) * (1 - selectedAnimalVariance);
-    var diffRounded = diff.toFixed(4);
+    var diff = Math.round(diff * 10000) / 10000;
     return {
         "UID": Guid.newGuid(),
         "Animal_ID": selectedAnimalId,
-        "Diff": diffRounded,
+        "Diff": diff,
         "AdWatched": false
     };
 }
