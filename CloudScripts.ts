@@ -504,11 +504,24 @@ handlers.UseAbility = function (args) {
             if (catalog.Catalog[i].ItemId == abilityId) {
                 var price = catalog.Catalog[i].VirtualCurrencyPrices["AP"];
 
-                server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" })
+                var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+                var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
-                var customData = catalog.Catalog[i].CustomData;
-                var customDataObject = JSON.parse(customData);
-                return customDataObject;
+                if (price < playerAP) {
+
+                    server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" })
+
+                    var customData = catalog.Catalog[i].CustomData;
+                    var customDataObject = JSON.parse(customData);
+                    return customDataObject;
+                } else {
+                    return {
+                        "Ability_ID": null,
+                        "Characteristic_Number": null
+                    }
+                }
+
+
             }
         }
     }
