@@ -192,127 +192,15 @@ handlers.ResolveRescueOperation = function (args) {
     var animalId = args.AnimalId;
     var diff = args.Difficulty;
     var success = args.Success;
+    var turnsLeft = args.TurnsLeft;
+    var turnsGiven = args.TurnsGiven;
     var alreadyOwned = false;
 
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
-    if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
+    if (turnsGiven == -1 && turnsLeft == -1) {
 
-        var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
-        var animals = animalData.Data["CollectedAnimals"].Value;
-        var animalsObject = JSON.parse(animals);
-
-
-        var animalStringArray: Array<String> = animalsObject["Animals"];
-
-        if (animalStringArray.some((animal) => animal == animalId)) {
-            alreadyOwned = true;
-        }
-
-        var newAnimal;
-        if (!alreadyOwned) {
-            newAnimal = animalId;
-        }
-
-        var rarity;
-        var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
-        var animals = titleDataResult.Data.Animals;
-        var animalsObj = JSON.parse(animals);
-        for (var key of Object.keys(animalsObj)) {
-            var currentAnimal = animalsObj[key];
-            if (key == animalId) {
-                rarity = currentAnimal['animalRarity'];
-            }
-        }
-
-        var expRarityMulty;
-
-        switch (rarity) {
-
-            case "Common":
-                expRarityMulty = 1;
-                break;
-
-            case "Uncommon":
-                expRarityMulty = 1.1;
-                break;
-
-            case "Rare":
-                expRarityMulty = 1.2;
-                break;
-
-            case "Super Rare":
-                expRarityMulty = 1.3;
-                break;
-
-            case "Ultra Rare":
-                expRarityMulty = 1.4;
-                break;
-        }
-
-        var turnsLeft = args.TurnsLeft;
-        var turnsGiven = args.TurnsGiven;
-
-        var expSkillMulty = turnsLeft / turnsGiven;
-
-
-
-        var expGain = Math.floor(expRarityMulty * 100 * expSkillMulty);
-
-        if (alreadyOwned) {
-            var currencyGain = Math.floor(20 * diff);
-            server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: currencyGain, VirtualCurrency: "AP" });
-        }
-
-        var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-        let playerLevel: number = levelResult.Statistics[0].Value;
-        let playerExperience: number = levelResult.Statistics[1].Value;
-
-        let newAbilityOrbs = [];
-        let exp2lvl = 0;
-
-        if (playerLevel < 40) {
-            var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
-            var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
-            exp2lvl = expLvlobject[playerLevel];
-
-            var lvlBracketBefore = GetLevelBracket(playerLevel);
-
-            if (playerExperience + expGain > exp2lvl) {
-                playerLevel++;
-                exp2lvl = expLvlobject[playerLevel];
-            }
-            playerExperience += expGain;
-            var newBracket = GetLevelBracket(playerLevel);
-
-            if (newBracket > lvlBracketBefore) {
-                var storeBeforeId = "S_" + lvlBracketBefore;
-                var storeBefore = server.GetStoreItems({ StoreId: storeBeforeId });
-
-                var storeAfterId = "S_" + newBracket;
-                var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
-
-                for (let i = 0; i < storeAfter.Store.length; i++) {
-                    if (!(storeBefore.Store.some((e) => e.ItemId = storeAfter.Store[i].ItemId))) {
-                        var orb = {
-                            "ID": storeAfter.Store[i].ItemId,
-                            "Cost": storeAfter.Store[i].VirtualCurrencyPrices["AP"]
-                        }
-                        newAbilityOrbs.push(orb);
-                    }
-                }
-            }
-
-            server.UpdatePlayerStatistics(
-                {
-                    PlayFabId: currentPlayerId,
-                    Statistics: [
-                        { StatisticName: "Level", Value: playerLevel },
-                        { StatisticName: "Experience", Value: playerExperience }
-                    ]
-                });
-        }
         var newRescueOperation = GetNewRescueOperation();
 
         var newRescueString = JSON.stringify(newRescueOperation);
@@ -322,42 +210,32 @@ handlers.ResolveRescueOperation = function (args) {
             Data: { "CurrentRescueOperation": newRescueString }
         })
 
-        if (newAnimal != null) {
-            var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
-            var animals = animalData.Data["CollectedAnimals"].Value;
-
-            var animalsObj = JSON.parse(animals);
-
-            animalsObj['Animals'].push(newAnimal);
-
-
-
-
-            server.UpdateUserData({
-                PlayFabId: currentPlayerId,
-                Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
-            })
-        }
-
-        var result = {
-            "RO_Code": 'SF',
-            "New_Animal": newAnimal,
-            "New_AOs": newAbilityOrbs,
-            "Exp": playerExperience - expLvlobject[playerLevel - 1],
-            "Lvl": playerLevel,
-            "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
+        var skipResult = {
+            "RO_Code": 'SK',
             "RO": newRescueOperation
         }
 
-        return result;
-    } else if (!success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
-        var addWatched = rescueOperationObject["AdWatched"]
-        if (addWatched) {
+        return skipResult;
 
-            var turnsLeft = args.TurnsLeft;
-            var turnsGiven = args.TurnsGiven;
+    } else {
 
-            var expRarityMulty;
+        if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
+
+            var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
+            var animals = animalData.Data["CollectedAnimals"].Value;
+            var animalsObject = JSON.parse(animals);
+
+
+            var animalStringArray: Array<String> = animalsObject["Animals"];
+
+            if (animalStringArray.some((animal) => animal == animalId)) {
+                alreadyOwned = true;
+            }
+
+            var newAnimal;
+            if (!alreadyOwned) {
+                newAnimal = animalId;
+            }
 
             var rarity;
             var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
@@ -370,10 +248,12 @@ handlers.ResolveRescueOperation = function (args) {
                 }
             }
 
+            var expRarityMulty;
+
             switch (rarity) {
 
                 case "Common":
-                    expRarityMulty = 1.0;
+                    expRarityMulty = 1;
                     break;
 
                 case "Uncommon":
@@ -393,55 +273,68 @@ handlers.ResolveRescueOperation = function (args) {
                     break;
             }
 
-            var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
+            var turnsLeft = args.TurnsLeft;
+            var turnsGiven = args.TurnsGiven;
 
-            var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
+            var expSkillMulty = turnsLeft / turnsGiven;
+
+
+
+            var expGain = Math.floor(expRarityMulty * 100 * expSkillMulty);
+
+            if (alreadyOwned) {
+                var currencyGain = Math.floor(20 * diff);
+                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: currencyGain, VirtualCurrency: "AP" });
+            }
 
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
             let playerLevel: number = levelResult.Statistics[0].Value;
             let playerExperience: number = levelResult.Statistics[1].Value;
 
-            var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
-            var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
-            let exp2lvl = expLvlobject[playerLevel];
-
-            var lvlBracketBefore = GetLevelBracket(playerLevel);
-
-            if (playerExperience + expGain > exp2lvl) {
-                playerLevel++;
-                exp2lvl = expLvlobject[playerLevel];
-            }
-            playerExperience += expGain;
-            var newBracket = GetLevelBracket(playerLevel);
-
             let newAbilityOrbs = [];
-            if (newBracket > lvlBracketBefore) {
-                var storeBeforeId = "S_" + lvlBracketBefore;
-                var storeBefore = server.GetStoreItems({ StoreId: storeBeforeId });
+            let exp2lvl = 0;
 
-                var storeAfterId = "S_" + newBracket;
-                var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
+            if (playerLevel < 40) {
+                var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
+                var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
+                exp2lvl = expLvlobject[playerLevel];
 
-                for (let i = 0; i < storeAfter.Store.length; i++) {
-                    if (!(storeBefore.Store.some((e) => e.ItemId = storeAfter.Store[i].ItemId))) {
-                        var orb = {
-                            "ID": storeAfter.Store[i].ItemId,
-                            "Cost": storeAfter.Store[i].VirtualCurrencyPrices["AP"]
+                var lvlBracketBefore = GetLevelBracket(playerLevel);
+
+                if (playerExperience + expGain > exp2lvl) {
+                    playerLevel++;
+                    exp2lvl = expLvlobject[playerLevel];
+                }
+                playerExperience += expGain;
+                var newBracket = GetLevelBracket(playerLevel);
+
+                if (newBracket > lvlBracketBefore) {
+                    var storeBeforeId = "S_" + lvlBracketBefore;
+                    var storeBefore = server.GetStoreItems({ StoreId: storeBeforeId });
+
+                    var storeAfterId = "S_" + newBracket;
+                    var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
+
+                    for (let i = 0; i < storeAfter.Store.length; i++) {
+                        if (!(storeBefore.Store.some((e) => e.ItemId = storeAfter.Store[i].ItemId))) {
+                            var orb = {
+                                "ID": storeAfter.Store[i].ItemId,
+                                "Cost": storeAfter.Store[i].VirtualCurrencyPrices["AP"]
+                            }
+                            newAbilityOrbs.push(orb);
                         }
-                        newAbilityOrbs.push(orb);
                     }
                 }
+
+                server.UpdatePlayerStatistics(
+                    {
+                        PlayFabId: currentPlayerId,
+                        Statistics: [
+                            { StatisticName: "Level", Value: playerLevel },
+                            { StatisticName: "Experience", Value: playerExperience }
+                        ]
+                    });
             }
-
-            server.UpdatePlayerStatistics(
-                {
-                    PlayFabId: currentPlayerId,
-                    Statistics: [
-                        { StatisticName: "Level", Value: playerLevel },
-                        { StatisticName: "Experience", Value: playerExperience }
-                    ]
-                });
-
             var newRescueOperation = GetNewRescueOperation();
 
             var newRescueString = JSON.stringify(newRescueOperation);
@@ -451,8 +344,26 @@ handlers.ResolveRescueOperation = function (args) {
                 Data: { "CurrentRescueOperation": newRescueString }
             })
 
-            var failComercialResult = {
-                "RO_Code": 'FF',
+            if (newAnimal != null) {
+                var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
+                var animals = animalData.Data["CollectedAnimals"].Value;
+
+                var animalsObj = JSON.parse(animals);
+
+                animalsObj['Animals'].push(newAnimal);
+
+
+
+
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
+                })
+            }
+
+            var result = {
+                "RO_Code": 'SF',
+                "New_Animal": newAnimal,
                 "New_AOs": newAbilityOrbs,
                 "Exp": playerExperience - expLvlobject[playerLevel - 1],
                 "Lvl": playerLevel,
@@ -460,32 +371,144 @@ handlers.ResolveRescueOperation = function (args) {
                 "RO": newRescueOperation
             }
 
-            return failComercialResult;
+            return result;
+        } else if (!success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
+            var addWatched = rescueOperationObject["AdWatched"]
+            if (addWatched) {
 
-        } else {
+                var turnsLeft = args.TurnsLeft;
+                var turnsGiven = args.TurnsGiven;
 
-            var updateString = JSON.stringify(
-                {
-                    "UID": rescueOperationObject["UID"],
-                    "Animal_ID": rescueOperationObject["Animal_ID"],
-                    "Diff": rescueOperationObject["Diff"],
-                    "AdWatched": true
+                var expRarityMulty;
+
+                var rarity;
+                var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
+                var animals = titleDataResult.Data.Animals;
+                var animalsObj = JSON.parse(animals);
+                for (var key of Object.keys(animalsObj)) {
+                    var currentAnimal = animalsObj[key];
+                    if (key == animalId) {
+                        rarity = currentAnimal['animalRarity'];
+                    }
                 }
-            )
 
-            server.UpdateUserData({
-                PlayFabId: currentPlayerId,
-                Data: { "CurrentRescueOperation": updateString }
-            })
+                switch (rarity) {
 
-            var numberOfMoves = Math.floor(diff * 20);
+                    case "Common":
+                        expRarityMulty = 1.0;
+                        break;
 
-            var noResult = {
-                "RO_Code": 'FC',
-                "Add_Moves": numberOfMoves
+                    case "Uncommon":
+                        expRarityMulty = 1.1;
+                        break;
+
+                    case "Rare":
+                        expRarityMulty = 1.2;
+                        break;
+
+                    case "Super Rare":
+                        expRarityMulty = 1.3;
+                        break;
+
+                    case "Ultra Rare":
+                        expRarityMulty = 1.4;
+                        break;
+                }
+
+                var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
+
+                var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
+
+                var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
+                let playerLevel: number = levelResult.Statistics[0].Value;
+                let playerExperience: number = levelResult.Statistics[1].Value;
+
+                var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
+                var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
+                let exp2lvl = expLvlobject[playerLevel];
+
+                var lvlBracketBefore = GetLevelBracket(playerLevel);
+
+                if (playerExperience + expGain > exp2lvl) {
+                    playerLevel++;
+                    exp2lvl = expLvlobject[playerLevel];
+                }
+                playerExperience += expGain;
+                var newBracket = GetLevelBracket(playerLevel);
+
+                let newAbilityOrbs = [];
+                if (newBracket > lvlBracketBefore) {
+                    var storeBeforeId = "S_" + lvlBracketBefore;
+                    var storeBefore = server.GetStoreItems({ StoreId: storeBeforeId });
+
+                    var storeAfterId = "S_" + newBracket;
+                    var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
+
+                    for (let i = 0; i < storeAfter.Store.length; i++) {
+                        if (!(storeBefore.Store.some((e) => e.ItemId = storeAfter.Store[i].ItemId))) {
+                            var orb = {
+                                "ID": storeAfter.Store[i].ItemId,
+                                "Cost": storeAfter.Store[i].VirtualCurrencyPrices["AP"]
+                            }
+                            newAbilityOrbs.push(orb);
+                        }
+                    }
+                }
+
+                server.UpdatePlayerStatistics(
+                    {
+                        PlayFabId: currentPlayerId,
+                        Statistics: [
+                            { StatisticName: "Level", Value: playerLevel },
+                            { StatisticName: "Experience", Value: playerExperience }
+                        ]
+                    });
+
+                var newRescueOperation = GetNewRescueOperation();
+
+                var newRescueString = JSON.stringify(newRescueOperation);
+
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "CurrentRescueOperation": newRescueString }
+                })
+
+                var failComercialResult = {
+                    "RO_Code": 'FF',
+                    "New_AOs": newAbilityOrbs,
+                    "Exp": playerExperience - expLvlobject[playerLevel - 1],
+                    "Lvl": playerLevel,
+                    "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
+                    "RO": newRescueOperation
+                }
+
+                return failComercialResult;
+
+            } else {
+
+                var updateString = JSON.stringify(
+                    {
+                        "UID": rescueOperationObject["UID"],
+                        "Animal_ID": rescueOperationObject["Animal_ID"],
+                        "Diff": rescueOperationObject["Diff"],
+                        "AdWatched": true
+                    }
+                )
+
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "CurrentRescueOperation": updateString }
+                })
+
+                var numberOfMoves = Math.floor(diff * 20);
+
+                var noResult = {
+                    "RO_Code": 'FC',
+                    "Add_Moves": numberOfMoves
+                }
+
+                return noResult;
             }
-
-            return noResult;
         }
     }
 }
