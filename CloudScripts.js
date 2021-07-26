@@ -419,7 +419,7 @@ handlers.UseAbility = function (args) {
                 var price = catalog.Catalog[i].VirtualCurrencyPrices["AP"];
                 var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
                 var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-                if (price < playerAP) {
+                if (price <= playerAP) {
                     server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" });
                     var customData = catalog.Catalog[i].CustomData;
                     var customDataObject = JSON.parse(customData);

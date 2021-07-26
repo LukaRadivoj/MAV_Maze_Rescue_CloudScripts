@@ -533,7 +533,7 @@ handlers.UseAbility = function (args) {
                 var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
                 var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
-                if (price < playerAP) {
+                if (price <= playerAP) {
 
                     server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: price, VirtualCurrency: "AP" })
 
