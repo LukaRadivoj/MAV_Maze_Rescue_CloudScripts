@@ -175,14 +175,26 @@ handlers.PlayFabSync = function (args) {
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
-    var result = {
-        "Lvl": playerLevel,
-        "Exp": playerExperience - expLvlobject[playerLevel - 1],
-        "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-        "AP": playerAP,
-        "AOs": abilityOrbs,
-        "Animal_IDs": animalsObject["Animals"],
-        "RO": rescueOperationObject
+    if (playerLevel == 1) {
+        var result = {
+            "Lvl": playerLevel,
+            "Exp": 0,
+            "Exp_To_Lvl": 50,
+            "AP": playerAP,
+            "AOs": abilityOrbs,
+            "Animal_IDs": animalsObject["Animals"],
+            "RO": rescueOperationObject
+        }
+    } else {
+        var result = {
+            "Lvl": playerLevel,
+            "Exp": playerExperience - expLvlobject[playerLevel - 1],
+            "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
+            "AP": playerAP,
+            "AOs": abilityOrbs,
+            "Animal_IDs": animalsObject["Animals"],
+            "RO": rescueOperationObject
+        }
     }
 
     return result;
