@@ -596,39 +596,45 @@ function GetNewRescueOperation() {
     var rarityMulty;
     var randomNumber;
 
-    if (playerLevel < 5) {
-        randomNumber = Math.floor(Math.random() * 51);
-    } else if (playerLevel < 10) {
-        randomNumber = Math.floor(Math.random() * 81);
-    } else if (playerLevel < 16) {
-        randomNumber = Math.floor(Math.random() * 96);
-    } else if (playerLevel < 22) {
-        randomNumber = Math.floor(Math.random() * 100);
+    randomNumber = Math.floor(Math.random() * 1067)
+    if (randomNumber == 420) {
+        rarity = "Mythical";
+        rarityMulty = 0.001
     } else {
-        randomNumber = Math.floor(Math.random() * 101);
-    }
 
-    if (randomNumber <= 50) {
-        rarity = "Common";
-        rarityMulty = 0.5;
-    }
-    else if (randomNumber > 50 && randomNumber <= 80) {
-        rarity = "Uncommon";
-        rarityMulty = 0.3;
-    }
-    else if (randomNumber > 80 && randomNumber <= 95) {
-        rarity = "Rare";
-        rarityMulty = 0.15;
-    }
-    else if (randomNumber > 95 && randomNumber <= 99) {
-        rarity = "SuperRare";
-        rarityMulty = 0.04;
-    }
-    else {
-        rarity = "UltraRare";
-        rarityMulty = 0.01;
-    }
+        if (playerLevel < 5) {
+            randomNumber = Math.floor(Math.random() * 51);
+        } else if (playerLevel < 10) {
+            randomNumber = Math.floor(Math.random() * 81);
+        } else if (playerLevel < 16) {
+            randomNumber = Math.floor(Math.random() * 96);
+        } else if (playerLevel < 22) {
+            randomNumber = Math.floor(Math.random() * 100);
+        } else {
+            randomNumber = Math.floor(Math.random() * 101);
+        }
 
+        if (randomNumber <= 50) {
+            rarity = "Common";
+            rarityMulty = 0.5;
+        }
+        else if (randomNumber > 50 && randomNumber <= 80) {
+            rarity = "Uncommon";
+            rarityMulty = 0.3;
+        }
+        else if (randomNumber > 80 && randomNumber <= 95) {
+            rarity = "Rare";
+            rarityMulty = 0.15;
+        }
+        else if (randomNumber > 95 && randomNumber <= 99) {
+            rarity = "SuperRare";
+            rarityMulty = 0.04;
+        }
+        else {
+            rarity = "UltraRare";
+            rarityMulty = 0.01;
+        }
+    }
 
     //Choosing Animal From Rarity
     var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
