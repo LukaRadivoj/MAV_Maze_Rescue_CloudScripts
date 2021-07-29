@@ -270,9 +270,13 @@ handlers.ResolveRescueOperation = function (args) {
                     Data: { "AnimalCount": animalCountObject }
                 })
             } else {
+                var updateObject = {
+                    animalId : 1
+                }                
+
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
-                    Data: { "AnimalCount": JSON.stringify({ animalId: 1 }) }
+                    Data: { "AnimalCount": JSON.stringify(updateObject) }
                 })
             }
 
