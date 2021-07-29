@@ -267,8 +267,6 @@ handlers.ResolveRescueOperation = function (args) {
                     animalCountObject[animalId] = 1;
                 }
 
-                return animalCountObject;
-
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
                     Data: { "AnimalCount": animalCountObject }
