@@ -106,7 +106,7 @@ handlers.NewUserInitialisation = function (args) {
         Data: { "CurrentRescueOperation": updateString }
     });
     var updateString = JSON.stringify({
-        "Animals": []
+        
     });
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
