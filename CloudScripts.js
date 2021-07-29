@@ -164,6 +164,7 @@ handlers.PlayFabSync = function (args) {
     return result;
 };
 handlers.ResolveRescueOperation = function (args) {
+    var _a;
     var animalId = args.AnimalId;
     var diff = args.Difficulty;
     var success = args.Success;
@@ -203,8 +204,8 @@ handlers.ResolveRescueOperation = function (args) {
             var animalCount = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["AnimalCount"] });
             if (Object.keys(animalCount.Data).length != 0) {
                 var animalCountObject = JSON.parse(animalCount.Data["AnimalCount"].Value);
-                for (var _i = 0, _a = Object.keys(animalCountObject); _i < _a.length; _i++) {
-                    var key = _a[_i];
+                for (var _i = 0, _b = Object.keys(animalCountObject); _i < _b.length; _i++) {
+                    var key = _b[_i];
                     if (key == animalId) {
                         animalCountObject[key] += 1;
                         found = true;
@@ -219,19 +220,17 @@ handlers.ResolveRescueOperation = function (args) {
                 });
             }
             else {
-                var updateObject;
-                updateObject[animalId] = 1;
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
-                    Data: { "AnimalCount": JSON.stringify(updateObject) }
+                    Data: { "AnimalCount": JSON.stringify((_a = {}, _a[animalId] = 1, _a)) }
                 });
             }
             var rarity;
             var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
             var animals = titleDataResult.Data.Animals;
             var animalsObj = JSON.parse(animals);
-            for (var _b = 0, _c = Object.keys(animalsObj); _b < _c.length; _b++) {
-                var key = _c[_b];
+            for (var _c = 0, _d = Object.keys(animalsObj); _c < _d.length; _c++) {
+                var key = _d[_c];
                 var currentAnimal = animalsObj[key];
                 if (key == animalId) {
                     rarity = currentAnimal['animalRarity'];
@@ -343,8 +342,8 @@ handlers.ResolveRescueOperation = function (args) {
                 var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
                 var animals = titleDataResult.Data.Animals;
                 var animalsObj = JSON.parse(animals);
-                for (var _d = 0, _e = Object.keys(animalsObj); _d < _e.length; _d++) {
-                    var key = _e[_d];
+                for (var _e = 0, _f = Object.keys(animalsObj); _e < _f.length; _e++) {
+                    var key = _f[_e];
                     var currentAnimal = animalsObj[key];
                     if (key == animalId) {
                         rarity = currentAnimal['animalRarity'];
