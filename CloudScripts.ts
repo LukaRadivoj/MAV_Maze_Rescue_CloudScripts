@@ -255,7 +255,7 @@ handlers.ResolveRescueOperation = function (args) {
             var found = false;
             var animalCount = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["AnimalCount"] });
             if (animalCount != null) {
-                var animalCountObject = JSON.parse(rescueOperationData.Data["AnimalCount"].Value);
+                var animalCountObject = JSON.parse(animalCount.Data["AnimalCount"].Value);
                 for (var key of Object.keys(animalCountObject)) {
                     if (key == animalId) {
                         animalCountObject[key] += 1;
