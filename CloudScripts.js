@@ -190,9 +190,11 @@ handlers.ResolveRescueOperation = function (args) {
             var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
             var animals = animalData.Data["CollectedAnimals"].Value;
             var animalsObject = JSON.parse(animals);
-            var animalStringArray = animalsObject["Animals"];
-            if (animalStringArray.some(function (animal) { return animal == animalId; })) {
-                alreadyOwned = true;
+            for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
+                var key = _a[_i];
+                if (key == animalId) {
+                    alreadyOwned = true;
+                }
             }
             var newAnimal;
             if (!alreadyOwned) {
@@ -202,8 +204,8 @@ handlers.ResolveRescueOperation = function (args) {
             var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
             var animals = titleDataResult.Data.Animals;
             var animalsObj = JSON.parse(animals);
-            for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
-                var key = _a[_i];
+            for (var _b = 0, _c = Object.keys(animalsObj); _b < _c.length; _b++) {
+                var key = _c[_b];
                 var currentAnimal = animalsObj[key];
                 if (key == animalId) {
                     rarity = currentAnimal['animalRarity'];
@@ -285,10 +287,14 @@ handlers.ResolveRescueOperation = function (args) {
                 Data: { "CurrentRescueOperation": newRescueString }
             });
             if (newAnimal != null) {
-                var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
-                var animals = animalData.Data["CollectedAnimals"].Value;
-                var animalsObj = JSON.parse(animals);
-                animalsObj['Animals'].push(newAnimal);
+                animalsObject[animalId] = 1;
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
+                });
+            }
+            else {
+                animalsObject[animalId] = animalsObject[animalId] + 1;
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
                     Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
@@ -315,8 +321,8 @@ handlers.ResolveRescueOperation = function (args) {
                 var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
                 var animals = titleDataResult.Data.Animals;
                 var animalsObj = JSON.parse(animals);
-                for (var _b = 0, _c = Object.keys(animalsObj); _b < _c.length; _b++) {
-                    var key = _c[_b];
+                for (var _d = 0, _e = Object.keys(animalsObj); _d < _e.length; _d++) {
+                    var key = _e[_d];
                     var currentAnimal = animalsObj[key];
                     if (key == animalId) {
                         rarity = currentAnimal['animalRarity'];
