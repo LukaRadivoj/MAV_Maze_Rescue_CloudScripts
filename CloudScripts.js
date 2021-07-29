@@ -106,7 +106,7 @@ handlers.NewUserInitialisation = function (args) {
         Data: { "CurrentRescueOperation": updateString }
     });
     var updateString = JSON.stringify({
-        
+        "Animals": []
     });
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
@@ -190,15 +190,39 @@ handlers.ResolveRescueOperation = function (args) {
             var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
             var animals = animalData.Data["CollectedAnimals"].Value;
             var animalsObject = JSON.parse(animals);
-            for (var _i = 0, _a = Object.keys(animalsObj); _i < _a.length; _i++) {
-                var key = _a[_i];
-                if (key == animalId) {
-                    alreadyOwned = true;
-                }
+            var animalStringArray = animalsObject["Animals"];
+            if (animalStringArray.some(function (animal) { return animal == animalId; })) {
+                alreadyOwned = true;
             }
             var newAnimal;
             if (!alreadyOwned) {
                 newAnimal = animalId;
+            }
+            //COUNTING ANIMALS
+            var found = false;
+            var animalCount = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["AnimalCount"] });
+            if (animalCount != null) {
+                var animalCountObject = JSON.parse(rescueOperationData.Data["AnimalCount"].Value);
+                for (var _i = 0, _a = Object.keys(animalCountObject); _i < _a.length; _i++) {
+                    var key = _a[_i];
+                    if (key == animalId) {
+                        animalCountObject[key] += 1;
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    animalCountObject[animalId] = 1;
+                }
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "AnimalCount": animalCountObject }
+                });
+            }
+            else {
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "AnimalCount": JSON.stringify({ AnimalId: 1 }) }
+                });
             }
             var rarity;
             var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
@@ -287,14 +311,10 @@ handlers.ResolveRescueOperation = function (args) {
                 Data: { "CurrentRescueOperation": newRescueString }
             });
             if (newAnimal != null) {
-                animalsObject[animalId] = 1;
-                server.UpdateUserData({
-                    PlayFabId: currentPlayerId,
-                    Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
-                });
-            }
-            else {
-                animalsObject[animalId] = animalsObject[animalId] + 1;
+                var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
+                var animals = animalData.Data["CollectedAnimals"].Value;
+                var animalsObj = JSON.parse(animals);
+                animalsObj['Animals'].push(newAnimal);
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
                     Data: { "CollectedAnimals": JSON.stringify(animalsObj) }

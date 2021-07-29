@@ -237,16 +237,45 @@ handlers.ResolveRescueOperation = function (args) {
             var animals = animalData.Data["CollectedAnimals"].Value;
             var animalsObject = JSON.parse(animals);
 
-            for (var key of Object.keys(animalsObj)) {
-                if (key == animalId) {
-                    alreadyOwned = true
-                }
+
+            var animalStringArray: Array<String> = animalsObject["Animals"];
+
+            if (animalStringArray.some((animal) => animal == animalId)) {
+                alreadyOwned = true;
             }
+
+
 
             var newAnimal;
             if (!alreadyOwned) {
                 newAnimal = animalId;
             }
+
+            //COUNTING ANIMALS
+            var found = false;
+            var animalCount = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["AnimalCount"] });
+            if (animalCount != null) {
+                var animalCountObject = JSON.parse(rescueOperationData.Data["AnimalCount"].Value);
+                for (var key of Object.keys(animalCountObject)) {
+                    if (key == animalId) {
+                        animalCountObject[key] += 1;
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    animalCountObject[animalId] = 1;
+                }
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "AnimalCount": animalCountObject }
+                })
+            } else {
+                server.UpdateUserData({
+                    PlayFabId: currentPlayerId,
+                    Data: { "AnimalCount": JSON.stringify({ AnimalId: 1 }) }
+                })
+            }
+
 
             var rarity;
             var titleDataResult = server.GetTitleData({ "Keys": ["Animals"] });
@@ -356,16 +385,15 @@ handlers.ResolveRescueOperation = function (args) {
             })
 
             if (newAnimal != null) {
+                var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
+                var animals = animalData.Data["CollectedAnimals"].Value;
 
-                animalsObject[animalId] = 1;
+                var animalsObj = JSON.parse(animals);
 
-                server.UpdateUserData({
-                    PlayFabId: currentPlayerId,
-                    Data: { "CollectedAnimals": JSON.stringify(animalsObj) }
-                })
-            } else {
+                animalsObj['Animals'].push(newAnimal);
 
-                animalsObject[animalId] = animalsObject[animalId] + 1;
+
+
 
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
