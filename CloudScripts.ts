@@ -253,8 +253,8 @@ handlers.ResolveRescueOperation = function (args) {
 
             //COUNTING ANIMALS
             var found = false;
-            var animalCount = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["AnimalCount"] }); 
-         
+            var animalCount = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["AnimalCount"] });
+
             if (Object.keys(animalCount.Data).length != 0) {
                 var animalCountObject = JSON.parse(animalCount.Data["AnimalCount"].Value);
                 for (var key of Object.keys(animalCountObject)) {
@@ -266,10 +266,9 @@ handlers.ResolveRescueOperation = function (args) {
                 if (!found) {
                     animalCountObject[animalId] = 1;
                 }
-                log.info(animalCountObject);                
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
-                    Data: { "AnimalCount": animalCountObject }
+                    Data: { "AnimalCount": JSON.stringify(animalCountObject) }
                 })
             } else {
                 server.UpdateUserData({
