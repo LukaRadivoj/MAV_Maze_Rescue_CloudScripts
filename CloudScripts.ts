@@ -267,11 +267,13 @@ handlers.ResolveRescueOperation = function (args) {
                     animalCountObject[animalId] = 1;
                 }
 
+                return animalCountObject;
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
                     Data: { "AnimalCount": animalCountObject }
                 })
             } else {
+                return Object.keys(animalCount.Data).length;
                 server.UpdateUserData({
                     PlayFabId: currentPlayerId,
                     Data: { "AnimalCount": JSON.stringify({ [animalId]: 1 }) }
