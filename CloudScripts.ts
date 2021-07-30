@@ -265,7 +265,6 @@ handlers.ResolveRescueOperation = function (args) {
                 }
                 if (!found) {
                     animalCountObject[animalId] = 1;
-                    log.info(animalCountObject);
                 }
                 log.info(animalCountObject);                
                 server.UpdateUserData({
