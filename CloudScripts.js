@@ -97,7 +97,7 @@ handlers.NewUserInitialisation = function (args) {
     var guid = Guid.newGuid();
     var updateString = JSON.stringify({
         "UID": guid,
-        "Animal_ID": "D_B1_C1",
+        "Animal_ID": "D_B8_C2",
         "Diff": 0.15,
         "AdWatched": false
     });
@@ -123,14 +123,20 @@ handlers.PlayFabSync = function (args) {
     var exp2lvl = expLvlobject[playerLevel];
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
+    var removeAds = false;
+    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+            removeAds = true;
+        }
+    }
     var levelBracket = GetLevelBracket(playerLevel);
     var storeId = "S_" + levelBracket;
     var store = server.GetStoreItems({ StoreId: storeId });
     var abilityOrbs = [];
-    for (var i = 0; i < store.Store.length; i++) {
+    for (var i_1 = 0; i_1 < store.Store.length; i_1++) {
         var orb = {
-            "ID": store.Store[i].ItemId,
-            "Cost": store.Store[i].VirtualCurrencyPrices["AP"]
+            "ID": store.Store[i_1].ItemId,
+            "Cost": store.Store[i_1].VirtualCurrencyPrices["AP"]
         };
         abilityOrbs.push(orb);
     }
@@ -147,7 +153,8 @@ handlers.PlayFabSync = function (args) {
             "AP": playerAP,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
-            "RO": rescueOperationObject
+            "RO": rescueOperationObject,
+            "Remove_Ads": removeAds
         };
     }
     else {
@@ -158,7 +165,8 @@ handlers.PlayFabSync = function (args) {
             "AP": playerAP,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
-            "RO": rescueOperationObject
+            "RO": rescueOperationObject,
+            "Remove_Ads": removeAds
         };
     }
     return result;

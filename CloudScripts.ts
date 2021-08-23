@@ -118,7 +118,7 @@ handlers.NewUserInitialisation = function (args) {
     var updateString = JSON.stringify(
         {
             "UID": guid,
-            "Animal_ID": "D_B1_C1",
+            "Animal_ID": "D_B8_C2",
             "Diff": 0.15,
             "AdWatched": false
         }
@@ -154,6 +154,13 @@ handlers.PlayFabSync = function (args) {
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
+    var removeAds = false;
+    for(var i = 0; i < playerInventoryResult.Inventory.length; i++){
+        if(playerInventoryResult.Inventory[i].ItemId == "iap_5"){
+            removeAds = true;
+        }
+    }
+
     let levelBracket: number = GetLevelBracket(playerLevel);
 
     var storeId = "S_" + levelBracket;
@@ -175,6 +182,8 @@ handlers.PlayFabSync = function (args) {
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
+
+
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
@@ -183,7 +192,8 @@ handlers.PlayFabSync = function (args) {
             "AP": playerAP,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
-            "RO": rescueOperationObject
+            "RO": rescueOperationObject,
+            "Remove_Ads" : removeAds
         }
     } else {
         var result = {
@@ -193,7 +203,8 @@ handlers.PlayFabSync = function (args) {
             "AP": playerAP,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
-            "RO": rescueOperationObject
+            "RO": rescueOperationObject,
+            "Remove_Ads" : removeAds
         }
     }
 
