@@ -195,6 +195,13 @@ handlers.ResolveRescueOperation = function (args) {
         return skipResult;
     }
     else {
+        var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+        var removeAds = false;
+        for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+            if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+                removeAds = true;
+            }
+        }
         if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
             var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
             var animals = animalData.Data["CollectedAnimals"].Value;
@@ -291,18 +298,18 @@ handlers.ResolveRescueOperation = function (args) {
                     var storeBefore = server.GetStoreItems({ StoreId: storeBeforeId });
                     var storeAfterId = "S_" + newBracket;
                     var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
-                    var _loop_1 = function (i) {
-                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i].ItemId; }))) {
+                    var _loop_1 = function (i_2) {
+                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i_2].ItemId; }))) {
                             orb = {
-                                "ID": storeAfter.Store[i].ItemId,
-                                "Cost": storeAfter.Store[i].VirtualCurrencyPrices["AP"]
+                                "ID": storeAfter.Store[i_2].ItemId,
+                                "Cost": storeAfter.Store[i_2].VirtualCurrencyPrices["AP"]
                             };
                             newAbilityOrbs.push(orb);
                         }
                     };
                     var orb;
-                    for (var i = 0; i < storeAfter.Store.length; i++) {
-                        _loop_1(i);
+                    for (var i_2 = 0; i_2 < storeAfter.Store.length; i_2++) {
+                        _loop_1(i_2);
                     }
                 }
                 server.UpdatePlayerStatistics({
@@ -336,7 +343,8 @@ handlers.ResolveRescueOperation = function (args) {
                 "Exp": playerExperience - expLvlobject[playerLevel - 1],
                 "Lvl": playerLevel,
                 "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-                "RO": newRescueOperation
+                "RO": newRescueOperation,
+                "Remove_Ads": removeAds
             };
             return result;
         }
@@ -395,18 +403,18 @@ handlers.ResolveRescueOperation = function (args) {
                     var storeBefore = server.GetStoreItems({ StoreId: storeBeforeId });
                     var storeAfterId = "S_" + newBracket;
                     var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
-                    var _loop_2 = function (i) {
-                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i].ItemId; }))) {
+                    var _loop_2 = function (i_3) {
+                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i_3].ItemId; }))) {
                             orb = {
-                                "ID": storeAfter.Store[i].ItemId,
-                                "Cost": storeAfter.Store[i].VirtualCurrencyPrices["AP"]
+                                "ID": storeAfter.Store[i_3].ItemId,
+                                "Cost": storeAfter.Store[i_3].VirtualCurrencyPrices["AP"]
                             };
                             newAbilityOrbs.push(orb);
                         }
                     };
                     var orb;
-                    for (var i = 0; i < storeAfter.Store.length; i++) {
-                        _loop_2(i);
+                    for (var i_3 = 0; i_3 < storeAfter.Store.length; i_3++) {
+                        _loop_2(i_3);
                     }
                 }
                 server.UpdatePlayerStatistics({
@@ -428,7 +436,8 @@ handlers.ResolveRescueOperation = function (args) {
                     "Exp": playerExperience - expLvlobject[playerLevel - 1],
                     "Lvl": playerLevel,
                     "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-                    "RO": newRescueOperation
+                    "RO": newRescueOperation,
+                    "Remove_Ads": removeAds
                 };
                 return failComercialResult;
             }

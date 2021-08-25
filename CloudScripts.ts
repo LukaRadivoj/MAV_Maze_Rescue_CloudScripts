@@ -155,8 +155,8 @@ handlers.PlayFabSync = function (args) {
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
     var removeAds = false;
-    for(var i = 0; i < playerInventoryResult.Inventory.length; i++){
-        if(playerInventoryResult.Inventory[i].ItemId == "iap_5"){
+    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
             removeAds = true;
         }
     }
@@ -193,7 +193,7 @@ handlers.PlayFabSync = function (args) {
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
-            "Remove_Ads" : removeAds
+            "Remove_Ads": removeAds
         }
     } else {
         var result = {
@@ -204,7 +204,7 @@ handlers.PlayFabSync = function (args) {
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
-            "Remove_Ads" : removeAds
+            "Remove_Ads": removeAds
         }
     }
 
@@ -241,6 +241,13 @@ handlers.ResolveRescueOperation = function (args) {
         return skipResult;
 
     } else {
+        var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+        var removeAds = false;
+        for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+            if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+                removeAds = true;
+            }
+        }
 
         if (success && animalId == rescueOperationObject["Animal_ID"] && diff == rescueOperationObject["Diff"]) {
 
@@ -420,7 +427,8 @@ handlers.ResolveRescueOperation = function (args) {
                 "Exp": playerExperience - expLvlobject[playerLevel - 1],
                 "Lvl": playerLevel,
                 "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-                "RO": newRescueOperation
+                "RO": newRescueOperation,
+                "Remove_Ads" : removeAds
             }
 
             return result;
@@ -531,7 +539,8 @@ handlers.ResolveRescueOperation = function (args) {
                     "Exp": playerExperience - expLvlobject[playerLevel - 1],
                     "Lvl": playerLevel,
                     "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-                    "RO": newRescueOperation
+                    "RO": newRescueOperation,
+                    "Remove_Ads" : removeAds
                 }
 
                 return failComercialResult;
