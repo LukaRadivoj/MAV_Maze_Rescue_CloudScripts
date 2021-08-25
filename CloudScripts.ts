@@ -353,7 +353,7 @@ handlers.ResolveRescueOperation = function (args) {
 
                 var lvlBracketBefore = GetLevelBracket(playerLevel);
 
-                if (playerExperience + expGain > exp2lvl) {
+                if (playerExperience + expGain >= exp2lvl) {
                     playerLevel++;
                     exp2lvl = expLvlobject[playerLevel];
                 }
