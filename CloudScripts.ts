@@ -153,6 +153,7 @@ handlers.PlayFabSync = function (args) {
 
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
     var playerAP = playerInventoryResult.VirtualCurrency["AP"];
+    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
 
     var removeAds = false;
     for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
@@ -190,6 +191,7 @@ handlers.PlayFabSync = function (args) {
             "Exp": 0,
             "Exp_To_Lvl": 50,
             "AP": playerAP,
+            "SO": playerSO,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
@@ -201,6 +203,7 @@ handlers.PlayFabSync = function (args) {
             "Exp": playerExperience - expLvlobject[playerLevel - 1],
             "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
             "AP": playerAP,
+            "SO": playerSO,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
@@ -428,7 +431,7 @@ handlers.ResolveRescueOperation = function (args) {
                 "Lvl": playerLevel,
                 "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
                 "RO": newRescueOperation,
-                "Remove_Ads" : removeAds
+                "Remove_Ads": removeAds
             }
 
             return result;
@@ -540,7 +543,7 @@ handlers.ResolveRescueOperation = function (args) {
                     "Lvl": playerLevel,
                     "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
                     "RO": newRescueOperation,
-                    "Remove_Ads" : removeAds
+                    "Remove_Ads": removeAds
                 }
 
                 return failComercialResult;
