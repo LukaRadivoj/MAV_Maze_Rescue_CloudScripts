@@ -112,6 +112,17 @@ handlers.NewUserInitialisation = function (args) {
         PlayFabId: currentPlayerId,
         Data: { "CollectedAnimals": updateString }
     });
+    var date = new Date();
+    var updateString = JSON.stringify({
+        "CurrentStreak": 0,
+        "CurrentRewardIndex": 0,
+        "LastLoginDay": date,
+        "PlayerSpawnRateBoost": 1
+    });
+    server.UpdateUserData({
+        PlayFabId: currentPlayerId,
+        Data: { "DailyRewards": updateString }
+    });
 };
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
