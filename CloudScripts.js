@@ -112,11 +112,10 @@ handlers.NewUserInitialisation = function (args) {
         PlayFabId: currentPlayerId,
         Data: { "CollectedAnimals": updateString }
     });
-    var date = new Date();
     var updateString = JSON.stringify({
         "CurrentStreak": 0,
         "CurrentRewardIndex": 0,
-        "LastLoginDay": date,
+        "LastLoginDay": new Date(),
         "PlayerSpawnRateBoost": 1
     });
     server.UpdateUserData({
@@ -157,6 +156,45 @@ handlers.PlayFabSync = function (args) {
     var animalsObject = JSON.parse(animals);
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
+    var dailyRewardsData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["DailyRewards"] });
+    var dailyRewardsObject = JSON.parse(dailyRewardsData.Data["DailyRewards"].Value);
+    var currentRewardIndex = dailyRewardsData["CurrentRewardIndex"];
+    var currentStreak = dailyRewardsData["CurrentStreak"];
+    var PlayerSpawnRateBoost = dailyRewardsData["PlayerSpawnRateBoost"];
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+    var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
+    lastLoginDay.setHours(0, 0, 0, 0);
+    if (lastLoginDay != today) {
+        if (lastLoginDay.getDate() - today.getDate() == 1) {
+            currentRewardIndex = (currentRewardIndex + 1) % 7;
+            if (currentRewardIndex == 0) {
+                currentStreak += 1;
+            }
+        }
+        else {
+            currentStreak = 1;
+            currentRewardIndex = 0;
+            PlayerSpawnRateBoost = 1;
+        }
+    }
+    titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
+    var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
+    var currentBoard;
+    switch (currentStreak) {
+        case 1:
+            currentBoard = boardsObject["Board_1"];
+            break;
+        case 2:
+            currentBoard = boardsObject["Board_1"];
+            break;
+        case 3:
+            currentBoard = boardsObject["Board_1"];
+            break;
+        case 4:
+            currentBoard = boardsObject["Board_1"];
+            break;
+    }
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
@@ -167,7 +205,9 @@ handlers.PlayFabSync = function (args) {
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
-            "Remove_Ads": removeAds
+            "Remove_Ads": removeAds,
+            "CurrentBoard": currentBoard,
+            "CurrentRewardIndex": currentRewardIndex
         };
     }
     else {
@@ -180,7 +220,9 @@ handlers.PlayFabSync = function (args) {
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
-            "Remove_Ads": removeAds
+            "Remove_Ads": removeAds,
+            "CurrentBoard": currentBoard,
+            "CurrentRewardIndex": currentRewardIndex
         };
     }
     return result;
