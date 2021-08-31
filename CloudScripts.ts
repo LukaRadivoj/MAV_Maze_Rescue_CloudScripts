@@ -146,7 +146,7 @@ handlers.NewUserInitialisation = function (args) {
         {
             "CurrentStreak": 0,
             "CurrentRewardIndex":0,
-            "LastLoginDay": date,
+            "LastLoginDay": date.getDate(),
             "PlayerSpawnRateBoost":1
         }
     )

@@ -116,7 +116,7 @@ handlers.NewUserInitialisation = function (args) {
     var updateString = JSON.stringify({
         "CurrentStreak": 0,
         "CurrentRewardIndex": 0,
-        "LastLoginDay": date,
+        "LastLoginDay": date.getDate(),
         "PlayerSpawnRateBoost": 1
     });
     server.UpdateUserData({
