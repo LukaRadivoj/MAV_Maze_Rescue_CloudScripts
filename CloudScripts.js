@@ -554,6 +554,17 @@ handlers.UseAbility = function (args) {
         }
     }
 };
+handlers.UseSkip = function (args) {
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
+    if (playerSO > 0) {
+        server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: 1, VirtualCurrency: "SO" });
+        playerSO -= 1;
+    }
+    return {
+        "SO": playerSO
+    };
+};
 function GetLevelBracket(level) {
     var playerLevel = level;
     var levelBracket;
