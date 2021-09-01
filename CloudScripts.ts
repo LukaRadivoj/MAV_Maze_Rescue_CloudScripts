@@ -32,10 +32,10 @@ handlers.GetMazeConfig = function (args) {
         rarity = "Rare";
     }
     else if (randomNumber > 95 && randomNumber <= 99) {
-        rarity = "SuperRare";
+        rarity = "Super Rare";
     }
     else {
-        rarity = "UltraRare";
+        rarity = "Ultra Rare";
     }
 
 
