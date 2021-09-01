@@ -126,8 +126,8 @@ handlers.NewUserInitialisation = function (args) {
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    var playerLevel = levelResult.Statistics[0].Value;
-    var playerExperience = levelResult.Statistics[1].Value;
+    var playerLevel = levelResult.Statistics["Level"].Value;
+    var playerExperience = levelResult.Statistics["Experience"].Value;
     var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
     var exp2lvl = expLvlobject[playerLevel];
@@ -186,13 +186,13 @@ handlers.PlayFabSync = function (args) {
             currentBoard = boardsObject["Board_1"];
             break;
         case 2:
-            currentBoard = boardsObject["Board_1"];
+            currentBoard = boardsObject["Board_2"];
             break;
         case 3:
-            currentBoard = boardsObject["Board_1"];
+            currentBoard = boardsObject["Board_3"];
             break;
         case 4:
-            currentBoard = boardsObject["Board_1"];
+            currentBoard = boardsObject["Board_4"];
             break;
     }
     if (playerLevel == 1) {
@@ -635,11 +635,11 @@ function GetNewRescueOperation() {
             rarityMulty = 0.15;
         }
         else if (randomNumber > 95 && randomNumber <= 99) {
-            rarity = "SuperRare";
+            rarity = "Super Rare";
             rarityMulty = 0.04;
         }
         else {
-            rarity = "UltraRare";
+            rarity = "Ultra Rare";
             rarityMulty = 0.01;
         }
     }

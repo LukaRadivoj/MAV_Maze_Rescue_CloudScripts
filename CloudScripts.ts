@@ -158,8 +158,8 @@ handlers.NewUserInitialisation = function (args) {
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    let playerLevel: number = levelResult.Statistics[0].Value;
-    let playerExperience: number = levelResult.Statistics[1].Value;
+    let playerLevel: number = levelResult.Statistics["Level"].Value;
+    let playerExperience: number = levelResult.Statistics["Experience"].Value;
 
     var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
@@ -233,15 +233,15 @@ handlers.PlayFabSync = function (args) {
             break;
 
         case 2:
-            currentBoard = boardsObject["Board_1"]
+            currentBoard = boardsObject["Board_2"]
             break;
 
         case 3:
-            currentBoard = boardsObject["Board_1"]
+            currentBoard = boardsObject["Board_3"]
             break;
 
         case 4:
-            currentBoard = boardsObject["Board_1"]
+            currentBoard = boardsObject["Board_4"]
             break;
     }
 
@@ -700,13 +700,12 @@ handlers.UseSkip = function (args) {
         server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: 1, VirtualCurrency: "SO" })
         playerSO -= 1;
     }
-    
+
     return {
         "SO": playerSO
     }
 
 }
-
 
 function GetLevelBracket(level: number) {
     var playerLevel = level;
@@ -781,11 +780,11 @@ function GetNewRescueOperation() {
             rarityMulty = 0.15;
         }
         else if (randomNumber > 95 && randomNumber <= 99) {
-            rarity = "SuperRare";
+            rarity = "Super Rare";
             rarityMulty = 0.04;
         }
         else {
-            rarity = "UltraRare";
+            rarity = "Ultra Rare";
             rarityMulty = 0.01;
         }
     }
@@ -835,7 +834,6 @@ function GetNewRescueOperation() {
         "AdWatched": false
     }
 }
-
 
 class Guid {
     static newGuid() {
