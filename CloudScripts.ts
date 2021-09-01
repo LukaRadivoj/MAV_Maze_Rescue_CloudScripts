@@ -329,8 +329,6 @@ handlers.ResolveRescueOperation = function (args) {
                 alreadyOwned = true;
             }
 
-
-
             var newAnimal;
             if (!alreadyOwned) {
                 newAnimal = animalId;
@@ -420,6 +418,8 @@ handlers.ResolveRescueOperation = function (args) {
             let newAbilityOrbs = [];
             let exp2lvl = 0;
 
+            var newUnlockedRarity = null;
+
             if (playerLevel < 40) {
                 var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
                 var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
@@ -429,6 +429,20 @@ handlers.ResolveRescueOperation = function (args) {
 
                 if (playerExperience + expGain >= exp2lvl) {
                     playerLevel++;
+                    switch (playerLevel) {
+                        case 5:
+                            newUnlockedRarity = "Uncommon"
+                            break;
+                        case 10:
+                            newUnlockedRarity = "Rare"
+                            break;
+                        case 16:
+                            newUnlockedRarity = "Super Rare"
+                            break;
+                        case 22:
+                            newUnlockedRarity = "Ultra Rare"
+                            break;
+                    }
                     exp2lvl = expLvlobject[playerLevel];
                 }
                 playerExperience += expGain;
@@ -500,7 +514,8 @@ handlers.ResolveRescueOperation = function (args) {
                 "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
                 "RO": newRescueOperation,
                 "Remove_Ads": removeAds,
-                "SO": playerSO
+                "SO": playerSO,
+                "NewUnlockedRarity": newUnlockedRarity
             }
 
             return result;
@@ -561,9 +576,25 @@ handlers.ResolveRescueOperation = function (args) {
 
                 var lvlBracketBefore = GetLevelBracket(playerLevel);
 
+                var newUnlockedRarity = null;
+
                 if (playerExperience + expGain > exp2lvl) {
                     playerLevel++;
                     exp2lvl = expLvlobject[playerLevel];
+                    switch (playerLevel) {
+                        case 5:
+                            newUnlockedRarity = "Uncommon"
+                            break;
+                        case 10:
+                            newUnlockedRarity = "Rare"
+                            break;
+                        case 16:
+                            newUnlockedRarity = "Super Rare"
+                            break;
+                        case 22:
+                            newUnlockedRarity = "Ultra Rare"
+                            break;
+                    }
                 }
                 playerExperience += expGain;
                 var newBracket = GetLevelBracket(playerLevel);
@@ -616,7 +647,8 @@ handlers.ResolveRescueOperation = function (args) {
                     "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
                     "RO": newRescueOperation,
                     "Remove_Ads": removeAds,
-                    "SO": playerSO
+                    "SO": playerSO,
+                    "NewUnlockedRarity": newUnlockedRarity
                 }
 
                 return failComercialResult;
