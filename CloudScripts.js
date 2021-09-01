@@ -129,7 +129,8 @@ handlers.NewUserInitialisation = function (args) {
         "CurrentRewardIndex": 0,
         "LastLoginDay": new Date(),
         "PlayerSpawnRateBoost": 1,
-        "CurrentBoard": currentPlayerBoard
+        "CurrentBoard": currentPlayerBoard,
+        "CurrentBoardID": "Board_1"
     });
     server.UpdateUserData({
         PlayFabId: currentPlayerId,
@@ -174,7 +175,8 @@ handlers.PlayFabSync = function (args) {
     var currentRewardIndex = dailyRewardsData["CurrentRewardIndex"];
     var currentStreak = dailyRewardsData["CurrentStreak"];
     var playerSpawnRateBoost = dailyRewardsData["PlayerSpawnRateBoost"];
-    var currentBoard = dailyRewardsData["CurrentBoard"];
+    var currentBoardID = dailyRewardsData["CurrentBoardID"];
+    var currentPlayerBoard = dailyRewardsData["CurrentBoard"];
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
@@ -186,35 +188,49 @@ handlers.PlayFabSync = function (args) {
             currentRewardIndex = (currentRewardIndex + 1) % 7;
             if (currentRewardIndex == 0) {
                 currentStreak += 1;
-                currentBoard = boardsObject[currentBoard["NextBoard"]];
-                //CHANGE THIS
+                currentBoardID = boardsObject[currentBoardID]["NextBoard"];
                 playerSpawnRateBoost = 1;
+                var currentTitleBoard = boardsObject[currentBoardID];
+                currentPlayerBoard = [];
+                for (var i = 0; i < 7; i++) {
+                    currentPlayerBoard.push({
+                        "RewardType": currentTitleBoard["Rewards"][i]["RewardType"],
+                        "RewardIndex": currentTitleBoard["Rewards"][i]["RewardIndex"],
+                        "RewardData": currentTitleBoard["Rewards"][i]["RewardData"],
+                        "Completed": false
+                    });
+                }
             }
         }
         else {
             currentStreak = 1;
             currentRewardIndex = 0;
+            currentBoardID = "Board_1";
             playerSpawnRateBoost = 1;
+            var currentTitleBoard = boardsObject[currentBoardID];
+            currentPlayerBoard = [];
+            for (var i = 0; i < 7; i++) {
+                currentPlayerBoard.push({
+                    "RewardType": currentTitleBoard["Rewards"][i]["RewardType"],
+                    "RewardIndex": currentTitleBoard["Rewards"][i]["RewardIndex"],
+                    "RewardData": currentTitleBoard["Rewards"][i]["RewardData"],
+                    "Completed": false
+                });
+            }
         }
         lastLoginDay = today;
-        var titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
-        var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
-        var currentTitleBoard = boardsObject["Board_1"];
-        var currentPlayerBoard = [];
+        var reward;
         for (var i = 0; i < 7; i++) {
-            currentPlayerBoard.push({
-                "RewardType": currentTitleBoard["Rewards"][i]["RewardType"],
-                "RewardIndex": currentTitleBoard["Rewards"][i]["RewardIndex"],
-                "RewardData": currentTitleBoard["Rewards"][i]["RewardData"],
-                "Completed": false
-            });
+            reward = boardsObject[currentBoardID]["Rewards"][currentRewardIndex];
         }
+        GrantDailyReward(reward);
         var updateString = JSON.stringify({
             "CurrentStreak": currentStreak,
             "CurrentRewardIndex": currentRewardIndex,
             "LastLoginDay": new Date(),
             "PlayerSpawnRateBoost": playerSpawnRateBoost,
-            "CurrentBoard": currentPlayerBoard
+            "CurrentBoard": currentPlayerBoard,
+            "CurrentBoardID": currentBoardID
         });
         server.UpdateUserData({
             PlayFabId: currentPlayerId,
@@ -627,6 +643,16 @@ handlers.UseSkip = function (args) {
         "SO": playerSO
     };
 };
+function GrantDailyReward(reward) {
+    switch (reward["RewardType"]) {
+        case "SO":
+            server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" });
+            break;
+        case "AP":
+            server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
+            break;
+    }
+}
 function GetLevelBracket(level) {
     var playerLevel = level;
     var levelBracket;
