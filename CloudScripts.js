@@ -220,8 +220,11 @@ handlers.PlayFabSync = function (args) {
         }
         lastLoginDay = today;
         var reward;
+        reward = boardsObject[currentBoardID]["Rewards"][currentRewardIndex];
         for (var i = 0; i < 7; i++) {
-            reward = boardsObject[currentBoardID]["Rewards"][currentRewardIndex];
+            if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
+                currentPlayerBoard[i]["Completed"] == true;
+            }
         }
         GrantDailyReward(reward);
         var updateString = JSON.stringify({
