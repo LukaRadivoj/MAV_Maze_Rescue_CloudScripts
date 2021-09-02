@@ -179,7 +179,7 @@ handlers.PlayFabSync = function (args) {
     var playerSpawnRateBoost = dailyRewardsData["PlayerSpawnRateBoost"];
     var currentBoardID = dailyRewardsData["CurrentBoardID"];
     var currentPlayerBoard = dailyRewardsData["CurrentBoard"];
-    log.info(currentPlayerBoard);
+    log.info(dailyRewardsObject);
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
