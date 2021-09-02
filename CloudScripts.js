@@ -127,7 +127,7 @@ handlers.NewUserInitialisation = function (args) {
     var updateString = JSON.stringify({
         "CurrentStreak": 0,
         "CurrentRewardIndex": 0,
-        "LastLoginDay": new Date(),
+        "LastLoginDay": new Date().setHours(0, 0, 0, 0),
         "PlayerSpawnRateBoost": 1,
         "CurrentBoard": currentPlayerBoard,
         "CurrentBoardID": "Board_1"
@@ -140,8 +140,8 @@ handlers.NewUserInitialisation = function (args) {
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    var playerLevel = levelResult.Statistics["Level"].Value;
-    var playerExperience = levelResult.Statistics["Experience"].Value;
+    var playerLevel = levelResult.Statistics[0].Value;
+    var playerExperience = levelResult.Statistics[1].Value;
     var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
     var exp2lvl = expLvlobject[playerLevel];
@@ -180,7 +180,6 @@ handlers.PlayFabSync = function (args) {
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
-    lastLoginDay.setHours(0, 0, 0, 0);
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
     if (lastLoginDay != today) {
@@ -220,17 +219,17 @@ handlers.PlayFabSync = function (args) {
         }
         lastLoginDay = today;
         var reward;
-        reward = boardsObject[currentBoardID]["Rewards"][currentRewardIndex];
         for (var i = 0; i < 7; i++) {
             if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
                 currentPlayerBoard[i]["Completed"] == true;
+                reward = currentPlayerBoard[i];
             }
         }
         GrantDailyReward(reward);
         var updateString = JSON.stringify({
             "CurrentStreak": currentStreak,
             "CurrentRewardIndex": currentRewardIndex,
-            "LastLoginDay": new Date(),
+            "LastLoginDay": new Date().setHours(0, 0, 0, 0),
             "PlayerSpawnRateBoost": playerSpawnRateBoost,
             "CurrentBoard": currentPlayerBoard,
             "CurrentBoardID": currentBoardID

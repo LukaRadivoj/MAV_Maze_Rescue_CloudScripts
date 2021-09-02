@@ -161,7 +161,7 @@ handlers.NewUserInitialisation = function (args) {
         {
             "CurrentStreak": 0,
             "CurrentRewardIndex": 0,
-            "LastLoginDay": new Date(),
+            "LastLoginDay": new Date().setHours(0, 0, 0, 0),
             "PlayerSpawnRateBoost": 1,
             "CurrentBoard": currentPlayerBoard,
             "CurrentBoardID": "Board_1"
@@ -177,8 +177,8 @@ handlers.NewUserInitialisation = function (args) {
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    let playerLevel: number = levelResult.Statistics["Level"].Value;
-    let playerExperience: number = levelResult.Statistics["Experience"].Value;
+    let playerLevel: number = levelResult.Statistics[0].Value;
+    let playerExperience: number = levelResult.Statistics[1].Value;
 
     var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
@@ -217,8 +217,6 @@ handlers.PlayFabSync = function (args) {
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
 
-
-
     var dailyRewardsData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["DailyRewards"] });
     var dailyRewardsObject = JSON.parse(dailyRewardsData.Data["DailyRewards"].Value);
 
@@ -231,7 +229,6 @@ handlers.PlayFabSync = function (args) {
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
-    lastLoginDay.setHours(0, 0, 0, 0);
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
@@ -278,12 +275,12 @@ handlers.PlayFabSync = function (args) {
 
         lastLoginDay = today;
 
-        var reward;
-        reward = boardsObject[currentBoardID]["Rewards"][currentRewardIndex]
+        var reward;        
 
         for (var i = 0; i < 7; i++) {
             if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
                 currentPlayerBoard[i]["Completed"] == true;
+                reward = currentPlayerBoard[i];
             }
         }
 
@@ -294,7 +291,7 @@ handlers.PlayFabSync = function (args) {
             {
                 "CurrentStreak": currentStreak,
                 "CurrentRewardIndex": currentRewardIndex,
-                "LastLoginDay": new Date(),
+                "LastLoginDay": new Date().setHours(0, 0, 0, 0),
                 "PlayerSpawnRateBoost": playerSpawnRateBoost,
                 "CurrentBoard": currentPlayerBoard,
                 "CurrentBoardID": currentBoardID
