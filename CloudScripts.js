@@ -174,12 +174,11 @@ handlers.PlayFabSync = function (args) {
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
     var dailyRewardsData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["DailyRewards"] });
     var dailyRewardsObject = JSON.parse(dailyRewardsData.Data["DailyRewards"].Value);
-    var currentRewardIndex = dailyRewardsData["CurrentRewardIndex"];
-    var currentStreak = dailyRewardsData["CurrentStreak"];
-    var playerSpawnRateBoost = dailyRewardsData["PlayerSpawnRateBoost"];
-    var currentBoardID = dailyRewardsData["CurrentBoardID"];
-    var currentPlayerBoard = dailyRewardsData["CurrentBoard"];
-    log.info(dailyRewardsObject);
+    var currentRewardIndex = dailyRewardsObject["CurrentRewardIndex"];
+    var currentStreak = dailyRewardsObject["CurrentStreak"];
+    var playerSpawnRateBoost = dailyRewardsObject["PlayerSpawnRateBoost"];
+    var currentBoardID = dailyRewardsObject["CurrentBoardID"];
+    var currentPlayerBoard = dailyRewardsObject["CurrentBoard"];
     var today = new Date();
     today.setHours(0, 0, 0, 0);
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
@@ -242,7 +241,6 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         });
     }
-    log.info(currentPlayerBoard);
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
