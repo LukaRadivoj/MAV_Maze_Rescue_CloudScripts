@@ -156,12 +156,13 @@ handlers.NewUserInitialisation = function (args) {
         )
     }
 
-
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
     var updateString = JSON.stringify(
         {
             "CurrentStreak": 0,
             "CurrentRewardIndex": 0,
-            "LastLoginDay": new Date().setHours(0, 0, 0, 0),
+            "LastLoginDay": today,
             "PlayerSpawnRateBoost": 1,
             "CurrentBoard": currentPlayerBoard,
             "CurrentBoardID": "Board_1"
@@ -275,7 +276,7 @@ handlers.PlayFabSync = function (args) {
 
         lastLoginDay = today;
 
-        var reward;        
+        var reward;
 
         for (var i = 0; i < 7; i++) {
             if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
@@ -291,7 +292,7 @@ handlers.PlayFabSync = function (args) {
             {
                 "CurrentStreak": currentStreak,
                 "CurrentRewardIndex": currentRewardIndex,
-                "LastLoginDay": new Date().setHours(0, 0, 0, 0),
+                "LastLoginDay": lastLoginDay,
                 "PlayerSpawnRateBoost": playerSpawnRateBoost,
                 "CurrentBoard": currentPlayerBoard,
                 "CurrentBoardID": currentBoardID
