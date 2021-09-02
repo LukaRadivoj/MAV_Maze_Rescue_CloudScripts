@@ -227,7 +227,16 @@ handlers.PlayFabSync = function (args) {
                 reward = currentPlayerBoard[i];
             }
         }
-        GrantDailyReward(reward);
+        switch (reward["RewardType"]) {
+            case "SO":
+                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" });
+                playerSO += reward["RewardData"];
+                break;
+            case "AP":
+                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
+                playerAP += reward["RewardData"];
+                break;
+        }
         var updateString = JSON.stringify({
             "CurrentStreak": currentStreak,
             "CurrentRewardIndex": currentRewardIndex,
@@ -647,16 +656,6 @@ handlers.UseSkip = function (args) {
         "SO": playerSO
     };
 };
-function GrantDailyReward(reward) {
-    switch (reward["RewardType"]) {
-        case "SO":
-            server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" });
-            break;
-        case "AP":
-            server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
-            break;
-    }
-}
 function GetLevelBracket(level) {
     var playerLevel = level;
     var levelBracket;
