@@ -157,7 +157,7 @@ handlers.NewUserInitialisation = function (args) {
     }
 
     var today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setTime(0)
     var updateString = JSON.stringify(
         {
             "CurrentStreak": 0,
@@ -233,8 +233,10 @@ handlers.PlayFabSync = function (args) {
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
+    
+    
 
-    if (lastLoginDay != today) {
+    if (lastLoginDay.getDate() != today.getDate()) {
         if (lastLoginDay.getDate() - today.getDate() == 1) {
             currentRewardIndex = (currentRewardIndex + 1) % 7;
             if (currentRewardIndex == 0) {
@@ -279,6 +281,7 @@ handlers.PlayFabSync = function (args) {
         var reward;
 
         for (var i = 0; i < 7; i++) {
+            log.info(currentPlayerBoard[i]["RewardIndex"])
             if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
                 currentPlayerBoard[i]["Completed"] == true;
                 reward = currentPlayerBoard[i];
