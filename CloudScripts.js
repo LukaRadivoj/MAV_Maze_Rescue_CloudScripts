@@ -222,9 +222,8 @@ handlers.PlayFabSync = function (args) {
         lastLoginDay = today;
         var reward;
         for (var i = 0; i < 7; i++) {
-            log.info(currentPlayerBoard[i]["RewardIndex"]);
             if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
-                currentPlayerBoard[i]["Completed"] == true;
+                currentPlayerBoard[i]["Completed"] = true;
                 reward = currentPlayerBoard[i];
             }
         }

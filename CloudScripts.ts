@@ -233,8 +233,8 @@ handlers.PlayFabSync = function (args) {
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
-    
-    
+
+
 
     if (lastLoginDay.getDate() != today.getDate()) {
         if (lastLoginDay.getDate() - today.getDate() == 1) {
@@ -281,9 +281,8 @@ handlers.PlayFabSync = function (args) {
         var reward;
 
         for (var i = 0; i < 7; i++) {
-            log.info(currentPlayerBoard[i]["RewardIndex"])
             if (currentPlayerBoard[i]["RewardIndex"] == currentRewardIndex) {
-                currentPlayerBoard[i]["Completed"] == true;
+                currentPlayerBoard[i]["Completed"] = true;
                 reward = currentPlayerBoard[i];
             }
         }
