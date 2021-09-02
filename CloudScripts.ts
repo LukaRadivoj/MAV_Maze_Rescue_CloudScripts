@@ -235,7 +235,8 @@ handlers.PlayFabSync = function (args) {
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
 
     if (lastLoginDay != today) {
-        var yesterday = today;
+        var yesterday = new Date();
+        yesterday.setTime(today.getTime());
         yesterday.setDate(yesterday.getDate() - 1)
         if (yesterday == lastLoginDay) {
             currentRewardIndex = (currentRewardIndex + 1) % 7;
@@ -276,7 +277,7 @@ handlers.PlayFabSync = function (args) {
             }
         }
 
-        lastLoginDay = today;
+        lastLoginDay.setTime(today.getTime())
 
         var reward;
 
