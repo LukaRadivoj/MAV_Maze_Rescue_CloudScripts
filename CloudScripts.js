@@ -241,6 +241,7 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         });
     }
+    log.info(currentPlayerBoard);
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,

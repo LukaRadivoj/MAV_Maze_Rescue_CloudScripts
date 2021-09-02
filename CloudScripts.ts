@@ -234,8 +234,6 @@ handlers.PlayFabSync = function (args) {
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
 
-
-
     if (lastLoginDay.getDate() != today.getDate()) {
         if (lastLoginDay.getDate() - today.getDate() == 1) {
             currentRewardIndex = (currentRewardIndex + 1) % 7;
@@ -287,7 +285,6 @@ handlers.PlayFabSync = function (args) {
             }
         }
 
-
         GrantDailyReward(reward);
 
         var updateString = JSON.stringify(
@@ -306,6 +303,8 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         })
     }
+
+    log.info(currentPlayerBoard)
 
     if (playerLevel == 1) {
         var result = {
