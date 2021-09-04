@@ -448,7 +448,7 @@ handlers.ResolveRescueOperation = function (args) {
                     var storeAfterId = "S_" + newBracket;
                     var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
                     var _loop_1 = function (i_2) {
-                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i_2].ItemId; }))) {
+                        if (!(storeBefore.Store.some(function (e) { return e.ItemId == storeAfter.Store[i_2].ItemId; }))) {
                             orb = {
                                 "ID": storeAfter.Store[i_2].ItemId,
                                 "Cost": storeAfter.Store[i_2].VirtualCurrencyPrices["AP"]
@@ -580,7 +580,7 @@ handlers.ResolveRescueOperation = function (args) {
                     var storeAfterId = "S_" + newBracket;
                     var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
                     var _loop_2 = function (i_3) {
-                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i_3].ItemId; }))) {
+                        if (!(storeBefore.Store.some(function (e) { return e.ItemId == storeAfter.Store[i_3].ItemId; }))) {
                             orb = {
                                 "ID": storeAfter.Store[i_3].ItemId,
                                 "Cost": storeAfter.Store[i_3].VirtualCurrencyPrices["AP"]
