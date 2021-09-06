@@ -241,7 +241,7 @@ handlers.PlayFabSync = function (args) {
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
-    var boardsObject = JSON.parse(titleDataResult.Data["Boards"])    
+    var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
 
     if (lastLoginDay != today) {
         var yesterday = new Date();
@@ -300,16 +300,18 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
-                var currencyCount : number = +playerSO
-                var currencyReward : number = + reward["RewardData"]
-                playerSO = (currencyCount + currencyReward)
+                var currencyReward: number = +reward["RewardData"]
+                log.info(playerSO.toString())
+                playerSO += currencyReward
+                log.info(playerSO.toString())
                 break;
 
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
-                var currencyCount : number = +playerAP
-                var currencyReward : number = + reward["RewardData"]
-                playerAP = (currencyCount + currencyReward)
+                var currencyReward: number = + reward["RewardData"]
+                log.info(playerAP.toString())
+                playerAP += currencyReward
+                log.info(playerAP.toString())
                 break;
         }
 
