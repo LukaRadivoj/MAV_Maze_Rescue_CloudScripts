@@ -308,10 +308,16 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
+                var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+                var playerAP = playerInventoryResult.VirtualCurrency["AP"]
+                var playerSO = playerInventoryResult.VirtualCurrency["SO"]
                 break;
 
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
+                var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+                var playerAP = playerInventoryResult.VirtualCurrency["AP"]
+                var playerSO = playerInventoryResult.VirtualCurrency["SO"]
                 break;
         }
 
