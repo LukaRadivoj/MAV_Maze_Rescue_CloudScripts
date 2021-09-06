@@ -412,7 +412,6 @@ handlers.ResolveRescueOperation = function (args) {
             var animals = animalData.Data["CollectedAnimals"].Value;
             var animalsObject = JSON.parse(animals);
 
-
             var animalStringArray: Array<String> = animalsObject["Animals"];
 
             if (animalStringArray.some((animal) => animal == animalId)) {
@@ -602,6 +601,7 @@ handlers.ResolveRescueOperation = function (args) {
 
             var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
             var playerSO = playerInventoryResult.VirtualCurrency["SO"];
+            var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
 
             var result = {
@@ -614,6 +614,7 @@ handlers.ResolveRescueOperation = function (args) {
                 "RO": newRescueOperation,
                 "Remove_Ads": removeAds,
                 "SO": playerSO,
+                "AP": playerAP,
                 "NewUnlockedRarity": newUnlockedRarity
             }
 
@@ -746,6 +747,7 @@ handlers.ResolveRescueOperation = function (args) {
 
                 var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
                 var playerSO = playerInventoryResult.VirtualCurrency["SO"];
+                var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
                 var failComercialResult = {
                     "RO_Code": 'FF',
@@ -756,6 +758,7 @@ handlers.ResolveRescueOperation = function (args) {
                     "RO": newRescueOperation,
                     "Remove_Ads": removeAds,
                     "SO": playerSO,
+                    "AP": playerAP,
                     "NewUnlockedRarity": newUnlockedRarity
                 }
 
