@@ -177,54 +177,6 @@ handlers.NewUserInitialisation = function (args) {
 
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
-    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    let playerLevel: number;
-    let playerExperience: number;
-
-    if (levelResult.Statistics[0].StatisticName == "Level") {
-        playerLevel = levelResult.Statistics[0].Value;
-        playerExperience = levelResult.Statistics[1].Value;
-    }
-    else {
-        playerExperience = levelResult.Statistics[0].Value;
-        playerLevel = levelResult.Statistics[1].Value;
-    }
-
-    var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
-    var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
-    let exp2lvl = expLvlobject[playerLevel];
-
-    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-
-    var removeAds = false;
-    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
-        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
-            removeAds = true;
-        }
-    }
-
-    let levelBracket: number = GetLevelBracket(playerLevel);
-
-    var storeId = "S_" + levelBracket;
-    var store = server.GetStoreItems({ StoreId: storeId });
-
-    let abilityOrbs = [];
-    for (let i = 0; i < store.Store.length; i++) {
-        var orb = {
-            "ID": store.Store[i].ItemId,
-            "Cost": store.Store[i].VirtualCurrencyPrices["AP"]
-        }
-        abilityOrbs.push(orb);
-    }
-
-    var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
-    var animals = animalData.Data["CollectedAnimals"].Value;
-    var animalsObject = JSON.parse(animals);
-
-    var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
-    var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
-
-
     var dailyRewardsData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["DailyRewards"] });
     var dailyRewardsObject = JSON.parse(dailyRewardsData.Data["DailyRewards"].Value);
 
@@ -322,8 +274,57 @@ handlers.PlayFabSync = function (args) {
         })
     }
 
-    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
+
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
+    let playerLevel: number;
+    let playerExperience: number;
+
+    if (levelResult.Statistics[0].StatisticName == "Level") {
+        playerLevel = levelResult.Statistics[0].Value;
+        playerExperience = levelResult.Statistics[1].Value;
+    }
+    else {
+        playerExperience = levelResult.Statistics[0].Value;
+        playerLevel = levelResult.Statistics[1].Value;
+    }
+
+    var titleDataResult = server.GetTitleData({ Keys: ["Levels"] })
+    var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
+    let exp2lvl = expLvlobject[playerLevel];
+
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+
+    var removeAds = false;
+    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+            removeAds = true;
+        }
+    }
+
+    let levelBracket: number = GetLevelBracket(playerLevel);
+
+    var storeId = "S_" + levelBracket;
+    var store = server.GetStoreItems({ StoreId: storeId });
+
+    let abilityOrbs = [];
+    for (let i = 0; i < store.Store.length; i++) {
+        var orb = {
+            "ID": store.Store[i].ItemId,
+            "Cost": store.Store[i].VirtualCurrencyPrices["AP"]
+        }
+        abilityOrbs.push(orb);
+    }
+
+    var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
+    var animals = animalData.Data["CollectedAnimals"].Value;
+    var animalsObject = JSON.parse(animals);
+
+    var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
+    var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
+
+
+
+
 
     if (playerLevel == 1) {
         var result = {
