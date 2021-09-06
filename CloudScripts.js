@@ -156,14 +156,6 @@ handlers.PlayFabSync = function (args) {
     var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
     var exp2lvl = expLvlobject[playerLevel];
-    // ADS
-    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-    var removeAds = false;
-    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
-        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
-            removeAds = true;
-        }
-    }
     //AO
     var levelBracket = GetLevelBracket(playerLevel);
     var storeId = "S_" + levelBracket;
@@ -263,9 +255,16 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         });
     }
-    var newPlayerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-    var playerAP = newPlayerInventoryResult.VirtualCurrency["AP"];
-    var playerSO = newPlayerInventoryResult.VirtualCurrency["SO"];
+    // ADS
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    var removeAds = false;
+    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+            removeAds = true;
+        }
+    }
+    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
+    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
