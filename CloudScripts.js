@@ -242,18 +242,20 @@ handlers.PlayFabSync = function (args) {
                 reward = currentPlayerBoard[i];
             }
         }
+        var playerAP;
+        var playerSO;
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" });
                 var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-                var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-                var playerSO = playerInventoryResult.VirtualCurrency["SO"];
+                playerAP = playerInventoryResult.VirtualCurrency["AP"];
+                playerSO = playerInventoryResult.VirtualCurrency["SO"];
                 break;
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
-                var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-                var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-                var playerSO = playerInventoryResult.VirtualCurrency["SO"];
+                playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+                playerAP = playerInventoryResult.VirtualCurrency["AP"];
+                playerSO = playerInventoryResult.VirtualCurrency["SO"];
                 break;
         }
         var updateString = JSON.stringify({
@@ -269,9 +271,6 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         });
     }
-    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
