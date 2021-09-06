@@ -192,8 +192,6 @@ handlers.PlayFabSync = function (args) {
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
-    log.info(today.toString());
-    log.info(lastLoginDay.toString());
     if (lastLoginDay != today) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
