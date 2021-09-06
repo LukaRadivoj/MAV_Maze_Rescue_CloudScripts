@@ -241,6 +241,10 @@ handlers.PlayFabSync = function (args) {
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
 
+    var playerAP = playerInventoryResult.VirtualCurrency["AP"]
+    var playerSO = playerInventoryResult.VirtualCurrency["SO"]
+
+
     if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
@@ -294,9 +298,6 @@ handlers.PlayFabSync = function (args) {
                 reward = currentPlayerBoard[i];
             }
         }
-
-        var playerAP = playerInventoryResult.VirtualCurrency["AP"]
-        var playerSO = playerInventoryResult.VirtualCurrency["SO"]
 
         switch (reward["RewardType"]) {
             case "SO":
