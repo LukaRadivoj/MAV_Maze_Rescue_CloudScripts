@@ -177,6 +177,7 @@ handlers.NewUserInitialisation = function (args) {
 
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
+    // LEVEL & EXP
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
     let playerLevel: number;
     let playerExperience: number;
@@ -194,6 +195,8 @@ handlers.PlayFabSync = function (args) {
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
     let exp2lvl = expLvlobject[playerLevel];
 
+
+    // ADS
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
 
     var removeAds = false;
@@ -203,6 +206,8 @@ handlers.PlayFabSync = function (args) {
         }
     }
 
+
+    //AO
     let levelBracket: number = GetLevelBracket(playerLevel);
 
     var storeId = "S_" + levelBracket;
@@ -217,14 +222,19 @@ handlers.PlayFabSync = function (args) {
         abilityOrbs.push(orb);
     }
 
+
+    //ANIMALS
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
     var animals = animalData.Data["CollectedAnimals"].Value;
     var animalsObject = JSON.parse(animals);
 
+
+    //RO
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
 
 
+    //REWARDS
     var dailyRewardsData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["DailyRewards"] });
     var dailyRewardsObject = JSON.parse(dailyRewardsData.Data["DailyRewards"].Value);
 
@@ -240,10 +250,6 @@ handlers.PlayFabSync = function (args) {
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
-
-    var playerAP = playerInventoryResult.VirtualCurrency["AP"]
-    var playerSO = playerInventoryResult.VirtualCurrency["SO"]
-
 
     if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
@@ -301,18 +307,14 @@ handlers.PlayFabSync = function (args) {
 
         switch (reward["RewardType"]) {
             case "SO":
-                playerSO += parseInt(reward["RewardData"])
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
                 break;
 
             case "AP":
-                playerAP += parseInt(reward["RewardData"])
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
                 break;
         }
 
-        playerSO = playerInventoryResult.VirtualCurrency["SO"]
-        playerAP = playerInventoryResult.VirtualCurrency["AP"]
 
         var updateString = JSON.stringify(
             {
@@ -330,6 +332,10 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         })
     }
+
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    var playerAP = playerInventoryResult.VirtualCurrency["AP"]
+    var playerSO = playerInventoryResult.VirtualCurrency["SO"]
 
 
     if (playerLevel == 1) {
