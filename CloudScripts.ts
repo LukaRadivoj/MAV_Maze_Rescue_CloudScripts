@@ -195,7 +195,6 @@ handlers.PlayFabSync = function (args) {
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"])
     let exp2lvl = expLvlobject[playerLevel];
 
-
     //AO
     let levelBracket: number = GetLevelBracket(playerLevel);
 
@@ -210,7 +209,6 @@ handlers.PlayFabSync = function (args) {
         }
         abilityOrbs.push(orb);
     }
-
 
     //ANIMALS
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] })
@@ -228,13 +226,9 @@ handlers.PlayFabSync = function (args) {
         }
     }
 
-
-
-
     //RO
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
-
 
     //REWARDS
     var dailyRewardsData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["DailyRewards"] });
@@ -336,9 +330,6 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         })
     }
-
-
-
 
     if (playerLevel == 1) {
         var result = {
