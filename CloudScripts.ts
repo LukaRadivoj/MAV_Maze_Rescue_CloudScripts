@@ -297,7 +297,6 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
-
                 break;
 
             case "AP":
@@ -333,17 +332,14 @@ handlers.PlayFabSync = function (args) {
         }
     }
 
-    var playerAP = playerInventoryResult.VirtualCurrency["AP"]
-    var playerSO = playerInventoryResult.VirtualCurrency["SO"]
-
 
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
             "Exp": 0,
             "Exp_To_Lvl": 50,
-            "AP": playerAP,
-            "SO": playerSO,
+            "AP": playerInventoryResult.VirtualCurrency["AP"],
+            "SO": playerInventoryResult.VirtualCurrency["SO"],
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
@@ -358,8 +354,8 @@ handlers.PlayFabSync = function (args) {
             "Lvl": playerLevel,
             "Exp": playerExperience - expLvlobject[playerLevel - 1],
             "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-            "AP": playerAP,
-            "SO": playerSO,
+            "AP": playerInventoryResult.VirtualCurrency["AP"],
+            "SO": playerInventoryResult.VirtualCurrency["SO"],
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
