@@ -305,22 +305,14 @@ handlers.PlayFabSync = function (args) {
             }
         }
 
-        var playerAP
-        var playerSO
-
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
-                var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-                playerAP = playerInventoryResult.VirtualCurrency["AP"]
-                playerSO = playerInventoryResult.VirtualCurrency["SO"]
+
                 break;
 
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
-                playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-                playerAP = playerInventoryResult.VirtualCurrency["AP"]
-                playerSO = playerInventoryResult.VirtualCurrency["SO"]
                 break;
         }
 
@@ -341,6 +333,10 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         })
     }
+
+    var newPlayerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    var playerAP = newPlayerInventoryResult.VirtualCurrency["AP"]
+    var playerSO = newPlayerInventoryResult.VirtualCurrency["SO"]
 
 
     if (playerLevel == 1) {
