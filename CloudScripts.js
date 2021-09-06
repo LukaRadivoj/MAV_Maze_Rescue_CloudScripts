@@ -192,11 +192,11 @@ handlers.PlayFabSync = function (args) {
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
-    if (lastLoginDay != today) {
+    if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
         yesterday.setDate(yesterday.getDate() - 1);
-        if (yesterday == lastLoginDay) {
+        if (yesterday.getTime() == lastLoginDay.getTime()) {
             currentRewardIndex = (currentRewardIndex + 1) % 7;
             if (currentRewardIndex == 0) {
                 currentStreak += 1;
