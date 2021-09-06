@@ -299,19 +299,15 @@ handlers.PlayFabSync = function (args) {
 
         switch (reward["RewardType"]) {
             case "SO":
-                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
-                var currencyReward: number = +reward["RewardData"]
-                log.info(playerSO.toString())
+                var currencyReward: number = parseInt(reward["RewardData"])
                 playerSO += currencyReward
-                log.info(playerSO.toString())
+                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
                 break;
 
             case "AP":
-                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
-                var currencyReward: number = + reward["RewardData"]
-                log.debug(playerAP.toString())
+                var currencyReward: number = parseInt(reward["RewardData"])
                 playerAP += currencyReward
-                log.debug(playerAP.toString())
+                server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
                 break;
         }
 
