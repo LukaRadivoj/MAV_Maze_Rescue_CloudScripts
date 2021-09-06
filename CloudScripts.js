@@ -263,8 +263,6 @@ handlers.PlayFabSync = function (args) {
             removeAds = true;
         }
     }
-    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
@@ -287,8 +285,8 @@ handlers.PlayFabSync = function (args) {
             "Lvl": playerLevel,
             "Exp": playerExperience - expLvlobject[playerLevel - 1],
             "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-            "AP": playerAP,
-            "SO": playerSO,
+            "AP": playerInventoryResult.VirtualCurrency["AP"],
+            "SO": playerInventoryResult.VirtualCurrency["SO"],
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
