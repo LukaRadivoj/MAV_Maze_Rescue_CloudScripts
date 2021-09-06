@@ -310,6 +310,9 @@ handlers.PlayFabSync = function (args) {
                 break;
         }
 
+        playerSO = playerInventoryResult.VirtualCurrency["SO"]
+        playerAP = playerInventoryResult.VirtualCurrency["AP"]
+
         var updateString = JSON.stringify(
             {
                 "CurrentStreak": currentStreak,

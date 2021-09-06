@@ -248,6 +248,8 @@ handlers.PlayFabSync = function (args) {
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
                 break;
         }
+        playerSO = playerInventoryResult.VirtualCurrency["SO"];
+        playerAP = playerInventoryResult.VirtualCurrency["AP"];
         var updateString = JSON.stringify({
             "CurrentStreak": currentStreak,
             "CurrentRewardIndex": currentRewardIndex,
