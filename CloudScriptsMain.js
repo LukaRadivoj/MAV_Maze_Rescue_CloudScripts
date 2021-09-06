@@ -156,8 +156,6 @@ handlers.PlayFabSync = function (args) {
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
     var exp2lvl = expLvlobject[playerLevel];
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
-    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
     var removeAds = false;
     for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
         if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
@@ -192,11 +190,11 @@ handlers.PlayFabSync = function (args) {
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
-    if (lastLoginDay != today) {
+    if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
         yesterday.setDate(yesterday.getDate() - 1);
-        if (yesterday == lastLoginDay) {
+        if (yesterday.getTime() == lastLoginDay.getTime()) {
             currentRewardIndex = (currentRewardIndex + 1) % 7;
             if (currentRewardIndex == 0) {
                 currentStreak += 1;
@@ -241,11 +239,9 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" });
-                playerSO += reward["RewardData"];
                 break;
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
-                playerAP += reward["RewardData"];
                 break;
         }
         var updateString = JSON.stringify({
@@ -261,6 +257,8 @@ handlers.PlayFabSync = function (args) {
             Data: { "DailyRewards": updateString }
         });
     }
+    var playerAP = playerInventoryResult.VirtualCurrency["AP"];
+    var playerSO = playerInventoryResult.VirtualCurrency["SO"];
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
