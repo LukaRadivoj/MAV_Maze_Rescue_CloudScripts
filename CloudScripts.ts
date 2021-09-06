@@ -240,6 +240,8 @@ handlers.PlayFabSync = function (args) {
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
 
+    var rewardCount
+
     if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
@@ -304,6 +306,8 @@ handlers.PlayFabSync = function (args) {
                 break;
         }
 
+        rewardCount = +reward["RewardData"]
+
 
         var updateString = JSON.stringify(
             {
@@ -332,14 +336,17 @@ handlers.PlayFabSync = function (args) {
         }
     }
 
+    var totalAP: number = playerInventoryResult.VirtualCurrency["AP"] + rewardCount
+    var totalSO: number = playerInventoryResult.VirtualCurrency["SO"] + rewardCount
+
 
     if (playerLevel == 1) {
         var result = {
             "Lvl": playerLevel,
             "Exp": 0,
             "Exp_To_Lvl": 50,
-            "AP": playerInventoryResult.VirtualCurrency["AP"],
-            "SO": playerInventoryResult.VirtualCurrency["SO"],
+            "AP": totalAP,
+            "SO": totalSO,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
@@ -354,8 +361,8 @@ handlers.PlayFabSync = function (args) {
             "Lvl": playerLevel,
             "Exp": playerExperience - expLvlobject[playerLevel - 1],
             "Exp_To_Lvl": exp2lvl - expLvlobject[playerLevel - 1],
-            "AP": playerInventoryResult.VirtualCurrency["AP"],
-            "SO": playerInventoryResult.VirtualCurrency["SO"],
+            "AP": totalAP,
+            "SO": totalSO,
             "AOs": abilityOrbs,
             "Animal_IDs": animalsObject["Animals"],
             "RO": rescueOperationObject,
