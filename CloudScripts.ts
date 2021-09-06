@@ -227,6 +227,9 @@ handlers.PlayFabSync = function (args) {
         }
     }
 
+    var totalAP: number = playerInventoryResult.VirtualCurrency["AP"]
+    var totalSO: number = playerInventoryResult.VirtualCurrency["SO"]
+
 
     //RO
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
@@ -309,14 +312,14 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
+                totalSO += +reward["RewardData"]
                 break;
 
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
+                totalAP += +reward["RewardData"]
                 break;
         }
-
-        rewardCount = +reward["RewardData"]
 
 
         var updateString = JSON.stringify(
@@ -337,9 +340,6 @@ handlers.PlayFabSync = function (args) {
     }
 
 
-
-    var totalAP: number = playerInventoryResult.VirtualCurrency["AP"] + rewardCount
-    var totalSO: number = playerInventoryResult.VirtualCurrency["SO"] + rewardCount
 
 
     if (playerLevel == 1) {
