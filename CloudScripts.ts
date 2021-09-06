@@ -219,7 +219,8 @@ handlers.PlayFabSync = function (args) {
 
     // ADS
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-
+    var totalAP: number = +playerInventoryResult.VirtualCurrency["AP"]
+    var totalSO: number = +playerInventoryResult.VirtualCurrency["SO"]
     var removeAds = false;
     for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
         if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
@@ -227,8 +228,7 @@ handlers.PlayFabSync = function (args) {
         }
     }
 
-    var totalAP: number = playerInventoryResult.VirtualCurrency["AP"]
-    var totalSO: number = playerInventoryResult.VirtualCurrency["SO"]
+
 
 
     //RO
@@ -252,8 +252,6 @@ handlers.PlayFabSync = function (args) {
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
-
-    var rewardCount: number
 
     if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();

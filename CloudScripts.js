@@ -174,14 +174,14 @@ handlers.PlayFabSync = function (args) {
     var animalsObject = JSON.parse(animals);
     // ADS
     var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    var totalAP = +playerInventoryResult.VirtualCurrency["AP"];
+    var totalSO = +playerInventoryResult.VirtualCurrency["SO"];
     var removeAds = false;
     for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
         if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
             removeAds = true;
         }
     }
-    var totalAP = playerInventoryResult.VirtualCurrency["AP"];
-    var totalSO = playerInventoryResult.VirtualCurrency["SO"];
     //RO
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
@@ -198,7 +198,6 @@ handlers.PlayFabSync = function (args) {
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
-    var rewardCount;
     if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
