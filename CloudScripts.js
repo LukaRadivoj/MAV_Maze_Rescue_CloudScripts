@@ -172,6 +172,14 @@ handlers.PlayFabSync = function (args) {
     var animalData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CollectedAnimals"] });
     var animals = animalData.Data["CollectedAnimals"].Value;
     var animalsObject = JSON.parse(animals);
+    // ADS
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+    var removeAds = false;
+    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+            removeAds = true;
+        }
+    }
     //RO
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] });
     var rescueOperationObject = JSON.parse(rescueOperationData.Data["CurrentRescueOperation"].Value);
@@ -256,14 +264,6 @@ handlers.PlayFabSync = function (args) {
             PlayFabId: currentPlayerId,
             Data: { "DailyRewards": updateString }
         });
-    }
-    // ADS
-    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
-    var removeAds = false;
-    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
-        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
-            removeAds = true;
-        }
     }
     var totalAP = playerInventoryResult.VirtualCurrency["AP"] + rewardCount;
     var totalSO = playerInventoryResult.VirtualCurrency["SO"] + rewardCount;

@@ -217,6 +217,16 @@ handlers.PlayFabSync = function (args) {
     var animals = animalData.Data["CollectedAnimals"].Value;
     var animalsObject = JSON.parse(animals);
 
+    // ADS
+    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
+
+    var removeAds = false;
+    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
+        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
+            removeAds = true;
+        }
+    }
+
 
     //RO
     var rescueOperationData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CurrentRescueOperation"] })
@@ -240,7 +250,7 @@ handlers.PlayFabSync = function (args) {
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
 
-    var rewardCount
+    var rewardCount: number
 
     if (lastLoginDay.getTime() != today.getTime()) {
         var yesterday = new Date();
@@ -326,15 +336,7 @@ handlers.PlayFabSync = function (args) {
         })
     }
 
-    // ADS
-    var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
 
-    var removeAds = false;
-    for (var i = 0; i < playerInventoryResult.Inventory.length; i++) {
-        if (playerInventoryResult.Inventory[i].ItemId == "iap_5") {
-            removeAds = true;
-        }
-    }
 
     var totalAP: number = playerInventoryResult.VirtualCurrency["AP"] + rewardCount
     var totalSO: number = playerInventoryResult.VirtualCurrency["SO"] + rewardCount
