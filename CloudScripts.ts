@@ -178,16 +178,14 @@ handlers.NewUserInitialisation = function (args) {
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    let playerLevel: number; 
+    let playerLevel: number;
     let playerExperience: number;
 
-    if(levelResult.Statistics[0].StatisticName == "Level")
-    {
+    if (levelResult.Statistics[0].StatisticName == "Level") {
         playerLevel = levelResult.Statistics[0].Value;
         playerExperience = levelResult.Statistics[1].Value;
     }
-    else
-    {
+    else {
         playerExperience = levelResult.Statistics[0].Value;
         playerLevel = levelResult.Statistics[1].Value;
     }
@@ -244,6 +242,9 @@ handlers.PlayFabSync = function (args) {
 
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] })
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"])
+
+    log.info(today.toString())
+    log.info(lastLoginDay.toString())
 
     if (lastLoginDay != today) {
         var yesterday = new Date();
@@ -302,12 +303,16 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" })
-                playerSO += reward["RewardData"]
+                var currencyCount = +playerSO
+                var currencyReward = + reward["RewardData"]
+                playerSO = (currencyCount + currencyReward)
                 break;
 
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" })
-                playerAP += reward["RewardData"]
+                var currencyCount = +playerAP
+                var currencyReward = + reward["RewardData"]
+                playerAP = (currencyCount + currencyReward)
                 break;
         }
 
@@ -499,16 +504,14 @@ handlers.ResolveRescueOperation = function (args) {
             }
 
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-            let playerLevel: number; 
+            let playerLevel: number;
             let playerExperience: number;
 
-            if(levelResult.Statistics[0].StatisticName == "Level")
-            {
+            if (levelResult.Statistics[0].StatisticName == "Level") {
                 playerLevel = levelResult.Statistics[0].Value;
                 playerExperience = levelResult.Statistics[1].Value;
             }
-            else
-            {
+            else {
                 playerExperience = levelResult.Statistics[0].Value;
                 playerLevel = levelResult.Statistics[1].Value;
             }
@@ -665,16 +668,14 @@ handlers.ResolveRescueOperation = function (args) {
                 var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
 
                 var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-                let playerLevel: number; 
+                let playerLevel: number;
                 let playerExperience: number;
 
-                if(levelResult.Statistics[0].StatisticName == "Level")
-                {
+                if (levelResult.Statistics[0].StatisticName == "Level") {
                     playerLevel = levelResult.Statistics[0].Value;
                     playerExperience = levelResult.Statistics[1].Value;
                 }
-                else
-                {
+                else {
                     playerExperience = levelResult.Statistics[0].Value;
                     playerLevel = levelResult.Statistics[1].Value;
                 }

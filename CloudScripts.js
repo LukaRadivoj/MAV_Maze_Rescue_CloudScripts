@@ -1,7 +1,7 @@
 //MAV_Maze_Rescue PlayFab CloudScripts. 
 //Cloud script that generates Maze Configuration
 handlers.GetMazeConfig = function (args) {
-    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level"] });
     var playerLevel = levelResult.Statistics[0].Value;
     //Choosing Rarity
     var rarity;
@@ -72,7 +72,7 @@ handlers.GetMazeConfig = function (args) {
 };
 //Cloud script that returns all unlockedOrbs
 handlers.GetUnlockedOrbs = function (args) {
-    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level"] });
     var playerLevel = levelResult.Statistics[0].Value;
     var levelBracket = GetLevelBracket(playerLevel);
     var id = "S_" + levelBracket;
@@ -142,8 +142,16 @@ handlers.NewUserInitialisation = function (args) {
 //Cloud script that syncs local and cloud player data
 handlers.PlayFabSync = function (args) {
     var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-    var playerLevel = levelResult.Statistics[0].Value;
-    var playerExperience = levelResult.Statistics[1].Value;
+    var playerLevel;
+    var playerExperience;
+    if (levelResult.Statistics[0].StatisticName == "Level") {
+        playerLevel = levelResult.Statistics[0].Value;
+        playerExperience = levelResult.Statistics[1].Value;
+    }
+    else {
+        playerExperience = levelResult.Statistics[0].Value;
+        playerLevel = levelResult.Statistics[1].Value;
+    }
     var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
     var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
     var exp2lvl = expLvlobject[playerLevel];
@@ -184,6 +192,8 @@ handlers.PlayFabSync = function (args) {
     var lastLoginDay = new Date(dailyRewardsObject["LastLoginDay"]);
     titleDataResult = server.GetTitleData({ Keys: ["Boards"] });
     var boardsObject = JSON.parse(titleDataResult.Data["Boards"]);
+    log.info(today.toString());
+    log.info(lastLoginDay.toString());
     if (lastLoginDay != today) {
         var yesterday = new Date();
         yesterday.setTime(today.getTime());
@@ -233,11 +243,15 @@ handlers.PlayFabSync = function (args) {
         switch (reward["RewardType"]) {
             case "SO":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "SO" });
-                playerSO += reward["RewardData"];
+                var currencyCount = +playerSO;
+                var currencyReward = +reward["RewardData"];
+                playerSO = (currencyCount + currencyReward);
                 break;
             case "AP":
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: +reward["RewardData"], VirtualCurrency: "AP" });
-                playerAP += reward["RewardData"];
+                var currencyCount = +playerAP;
+                var currencyReward = +reward["RewardData"];
+                playerAP = (currencyCount + currencyReward);
                 break;
         }
         var updateString = JSON.stringify({
@@ -396,8 +410,16 @@ handlers.ResolveRescueOperation = function (args) {
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: currencyGain, VirtualCurrency: "AP" });
             }
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-            var playerLevel = levelResult.Statistics[0].Value;
-            var playerExperience = levelResult.Statistics[1].Value;
+            var playerLevel = void 0;
+            var playerExperience = void 0;
+            if (levelResult.Statistics[0].StatisticName == "Level") {
+                playerLevel = levelResult.Statistics[0].Value;
+                playerExperience = levelResult.Statistics[1].Value;
+            }
+            else {
+                playerExperience = levelResult.Statistics[0].Value;
+                playerLevel = levelResult.Statistics[1].Value;
+            }
             var newAbilityOrbs = [];
             var exp2lvl = 0;
             var newUnlockedRarity = null;
@@ -432,7 +454,7 @@ handlers.ResolveRescueOperation = function (args) {
                     var storeAfterId = "S_" + newBracket;
                     var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
                     var _loop_1 = function (i_2) {
-                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i_2].ItemId; }))) {
+                        if (!(storeBefore.Store.some(function (e) { return e.ItemId == storeAfter.Store[i_2].ItemId; }))) {
                             orb = {
                                 "ID": storeAfter.Store[i_2].ItemId,
                                 "Cost": storeAfter.Store[i_2].VirtualCurrencyPrices["AP"]
@@ -522,8 +544,16 @@ handlers.ResolveRescueOperation = function (args) {
                 var expSkillMulty = 1 + (1 - turnsLeft / turnsGiven);
                 var expGain = Math.floor(expRarityMulty * 20 * expSkillMulty);
                 var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
-                var playerLevel = levelResult.Statistics[0].Value;
-                var playerExperience = levelResult.Statistics[1].Value;
+                var playerLevel = void 0;
+                var playerExperience = void 0;
+                if (levelResult.Statistics[0].StatisticName == "Level") {
+                    playerLevel = levelResult.Statistics[0].Value;
+                    playerExperience = levelResult.Statistics[1].Value;
+                }
+                else {
+                    playerExperience = levelResult.Statistics[0].Value;
+                    playerLevel = levelResult.Statistics[1].Value;
+                }
                 var titleDataResult = server.GetTitleData({ Keys: ["Levels"] });
                 var expLvlobject = JSON.parse(titleDataResult.Data["Levels"]);
                 var exp2lvl = expLvlobject[playerLevel];
@@ -556,7 +586,7 @@ handlers.ResolveRescueOperation = function (args) {
                     var storeAfterId = "S_" + newBracket;
                     var storeAfter = server.GetStoreItems({ StoreId: storeAfterId });
                     var _loop_2 = function (i_3) {
-                        if (!(storeBefore.Store.some(function (e) { return e.ItemId = storeAfter.Store[i_3].ItemId; }))) {
+                        if (!(storeBefore.Store.some(function (e) { return e.ItemId == storeAfter.Store[i_3].ItemId; }))) {
                             orb = {
                                 "ID": storeAfter.Store[i_3].ItemId,
                                 "Cost": storeAfter.Store[i_3].VirtualCurrencyPrices["AP"]
@@ -620,7 +650,7 @@ handlers.ResolveRescueOperation = function (args) {
 };
 handlers.UseAbility = function (args) {
     var abilityId = args.AbilityId;
-    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level"] });
     var playerLevel = levelResult.Statistics[0].Value;
     var levelBracket = GetLevelBracket(playerLevel);
     var storeId = "S_" + levelBracket;
@@ -689,7 +719,7 @@ function GetLevelBracket(level) {
     return levelBracket;
 }
 function GetNewRescueOperation() {
-    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId });
+    var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level"] });
     var playerLevel = levelResult.Statistics[0].Value;
     //Choosing Rarity
     var rarity;
