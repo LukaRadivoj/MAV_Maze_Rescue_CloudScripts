@@ -614,7 +614,7 @@ handlers.ResolveRescueOperation = function (args) {
                 "RO": newRescueOperation,
                 "Remove_Ads": removeAds,
                 "SO": playerSO,
-                "AP": playerAP,
+                "AP": currencyGain,
                 "NewUnlockedRarity": newUnlockedRarity
             }
 
@@ -747,7 +747,6 @@ handlers.ResolveRescueOperation = function (args) {
 
                 var playerInventoryResult = server.GetUserInventory({ PlayFabId: currentPlayerId });
                 var playerSO = playerInventoryResult.VirtualCurrency["SO"];
-                var playerAP = playerInventoryResult.VirtualCurrency["AP"];
 
                 var failComercialResult = {
                     "RO_Code": 'FF',
@@ -758,7 +757,7 @@ handlers.ResolveRescueOperation = function (args) {
                     "RO": newRescueOperation,
                     "Remove_Ads": removeAds,
                     "SO": playerSO,
-                    "AP": playerAP,
+                    "AP": 0,
                     "NewUnlockedRarity": newUnlockedRarity
                 }
 
