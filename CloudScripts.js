@@ -405,8 +405,9 @@ handlers.ResolveRescueOperation = function (args) {
             var turnsGiven = args.TurnsGiven;
             var expSkillMulty = turnsLeft / turnsGiven;
             var expGain = Math.floor(expRarityMulty * 100 * expSkillMulty);
+            var currencyGain;
             if (alreadyOwned) {
-                var currencyGain = Math.floor(20 * diff);
+                currencyGain = Math.floor(20 * diff);
                 server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, Amount: currencyGain, VirtualCurrency: "AP" });
             }
             var levelResult = server.GetPlayerStatistics({ PlayFabId: currentPlayerId, StatisticNames: ["Level", "Experience"] });
