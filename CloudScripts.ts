@@ -484,6 +484,10 @@ handlers.ResolveRescueOperation = function (args) {
                 case "Ultra Rare":
                     expRarityMulty = 1.4;
                     break;
+
+                case "Mythical":
+                    expRarityMulty = 1.6;
+                    break;
             }
 
             var turnsLeft = args.TurnsLeft;
@@ -660,6 +664,10 @@ handlers.ResolveRescueOperation = function (args) {
 
                     case "Ultra Rare":
                         expRarityMulty = 1.4;
+                        break;
+
+                    case "Mythical":
+                        expRarityMulty = 1.6;
                         break;
                 }
 
